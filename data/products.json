@@ -1,0 +1,194 @@
+[
+  {
+    "id": "rivella-rot",
+    "name": "Rivella Rot",
+    "menge": "1.5 l",
+    "preis": 2.4,
+    "preisCoop": 2.55,
+    "laden": "migros",
+    "bild": "/products/rivella-rot.svg",
+    "stichdatum": "2026-10-02"
+  },
+  {
+    "id": "ovomaltine",
+    "name": "Ovomaltine",
+    "menge": "400 g",
+    "preis": 6.9,
+    "preisCoop": 7.2,
+    "laden": "migros",
+    "bild": "/products/ovomaltine.svg",
+    "stichdatum": "2026-10-04"
+  },
+  {
+    "id": "zweifel-paprika",
+    "name": "Zweifel Paprika",
+    "menge": "175 g",
+    "preis": 4.5,
+    "laden": "coop",
+    "bild": "/products/zweifel-paprika.svg",
+    "stichdatum": "2026-10-06"
+  },
+  {
+    "id": "cailler-milch",
+    "name": "Cailler Milch",
+    "menge": "100 g",
+    "preis": 2.25,
+    "preisCoop": 2.4,
+    "laden": "migros",
+    "bild": "/products/cailler-milch.svg",
+    "stichdatum": "2026-10-08"
+  },
+  {
+    "id": "emmi-jogurt",
+    "name": "Emmi Jogurt Nature",
+    "menge": "180 g",
+    "preis": 0.9,
+    "preisCoop": 0.95,
+    "laden": "migros",
+    "bild": "/products/emmi-jogurt.svg",
+    "stichdatum": "2026-10-09"
+  },
+  {
+    "id": "valser-classic",
+    "name": "Valser Classic",
+    "menge": "6 × 1.5 l",
+    "preis": 6.95,
+    "laden": "coop",
+    "bild": "/products/valser-classic.svg",
+    "stichdatum": "2026-10-11"
+  },
+  {
+    "id": "bio-ruchbrot",
+    "name": "Bio Ruchbrot",
+    "menge": "500 g",
+    "preis": 3.7,
+    "preisCoop": 3.95,
+    "laden": "migros",
+    "bild": "/products/bio-ruchbrot.svg",
+    "stichdatum": "2026-10-13"
+  },
+  {
+    "id": "appenzeller-mild",
+    "name": "Appenzeller mild",
+    "menge": "150 g",
+    "preis": 4.8,
+    "laden": "coop",
+    "bild": "/products/appenzeller-mild.svg",
+    "stichdatum": "2026-10-14"
+  },
+  {
+    "id": "cenovis",
+    "name": "Cenovis",
+    "menge": "200 g",
+    "preis": 5.5,
+    "preisCoop": 5.8,
+    "laden": "migros",
+    "bild": "/products/cenovis.svg",
+    "stichdatum": "2026-10-16"
+  },
+  {
+    "id": "kambly-butterzoepfli",
+    "name": "Kambly Butterzöpfli",
+    "menge": "100 g",
+    "preis": 2.95,
+    "laden": "coop",
+    "bild": "/products/kambly-butterzoepfli.svg",
+    "stichdatum": "2026-10-18"
+  },
+  {
+    "id": "thomy-senf",
+    "name": "Thomy Senf mild",
+    "menge": "100 ml",
+    "preis": 1.8,
+    "preisCoop": 1.7,
+    "laden": "migros",
+    "bild": "/products/thomy-senf.svg",
+    "stichdatum": "2026-10-19"
+  },
+  {
+    "id": "die-butter",
+    "name": "Die Butter",
+    "menge": "200 g",
+    "preis": 4.1,
+    "preisCoop": 4.3,
+    "laden": "migros",
+    "bild": "/products/die-butter.svg",
+    "stichdatum": "2026-10-21"
+  },
+  {
+    "id": "schuemli-mild",
+    "name": "Schüümli mild",
+    "menge": "500 g",
+    "preis": 8.5,
+    "laden": "coop",
+    "bild": "/products/schuemli-mild.svg",
+    "stichdatum": "2026-10-22"
+  },
+  {
+    "id": "bio-eier",
+    "name": "Bio Eier",
+    "menge": "6 Stück",
+    "preis": 5.6,
+    "preisCoop": 5.9,
+    "laden": "migros",
+    "bild": "/products/bio-eier.svg",
+    "stichdatum": "2026-10-24"
+  },
+  {
+    "id": "apfelsaft-trueb",
+    "name": "Apfelsaft trüb",
+    "menge": "1 l",
+    "preis": 2.7,
+    "preisCoop": 2.45,
+    "laden": "migros",
+    "bild": "/products/apfelsaft-trueb.svg",
+    "stichdatum": "2026-10-25"
+  },
+  {
+    "id": "ragusa",
+    "name": "Ragusa",
+    "menge": "50 g",
+    "preis": 1.9,
+    "laden": "migros",
+    "bild": "/products/ragusa.svg",
+    "stichdatum": "2026-10-27"
+  },
+  {
+    "id": "toilettenpapier",
+    "name": "Toilettenpapier",
+    "menge": "10 Rollen",
+    "preis": 6.2,
+    "preisCoop": 6.7,
+    "laden": "migros",
+    "bild": "/products/toilettenpapier.svg",
+    "stichdatum": "2026-10-28"
+  },
+  {
+    "id": "vollmilch",
+    "name": "Vollmilch",
+    "menge": "1 l",
+    "preis": 1.6,
+    "laden": "coop",
+    "bild": "/products/vollmilch.svg",
+    "stichdatum": "2026-10-30"
+  },
+  {
+    "id": "aromat",
+    "name": "Aromat",
+    "menge": "90 g",
+    "preis": 3.3,
+    "preisCoop": 3.15,
+    "laden": "migros",
+    "bild": "/products/aromat.svg",
+    "stichdatum": "2026-11-01"
+  },
+  {
+    "id": "buendner-nusstorte",
+    "name": "Bündner Nusstorte",
+    "menge": "250 g",
+    "preis": 14.9,
+    "laden": "migros",
+    "bild": "/products/buendner-nusstorte.svg",
+    "stichdatum": "2026-11-03"
+  }
+]

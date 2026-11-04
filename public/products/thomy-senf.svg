@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Senf">
+  <rect width="480" height="480" fill="#F3EEE4"/>
+  <ellipse cx="240" cy="400" rx="118" ry="16" fill="#E4D9C8"/>
+  
+    <rect x="214" y="86" width="52" height="28" rx="6" fill="#8E1A24"/>
+    <rect x="206" y="110" width="68" height="48" rx="10" fill="#C8102E"/>
+    <rect x="188" y="154" width="104" height="196" rx="28" fill="#F0C84A"/>
+    <rect x="206" y="196" width="68" height="16" rx="8" fill="#C8102E"/>
+  
+</svg>

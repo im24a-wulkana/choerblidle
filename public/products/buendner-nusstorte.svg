@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Nusstorte">
+  <rect width="480" height="480" fill="#F3EEE4"/>
+  <ellipse cx="240" cy="400" rx="118" ry="16" fill="#E4D9C8"/>
+  
+    <ellipse cx="240" cy="286" rx="140" ry="48" fill="#C48A4A"/>
+    <ellipse cx="240" cy="262" rx="122" ry="40" fill="#6B3E26"/>
+    <ellipse cx="240" cy="252" rx="104" ry="30" fill="#8C5A32"/>
+    <circle cx="210" cy="246" r="8" fill="#4A2C18"/>
+    <circle cx="246" cy="238" r="7" fill="#4A2C18"/>
+    <circle cx="274" cy="250" r="8" fill="#4A2C18"/>
+    <circle cx="232" cy="264" r="6" fill="#4A2C18"/>
+    <ellipse cx="240" cy="300" rx="140" ry="18" fill="none" stroke="#A8743A" stroke-width="8"/>
+  
+</svg>

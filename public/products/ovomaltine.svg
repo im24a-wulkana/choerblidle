@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Dose">
+  <rect width="480" height="480" fill="#F3EEE4"/>
+  <ellipse cx="240" cy="400" rx="118" ry="16" fill="#E4D9C8"/>
+  
+    <ellipse cx="240" cy="132" rx="92" ry="22" fill="#A86A3A"/>
+    <rect x="148" y="132" width="184" height="36" fill="#8A4B2A"/>
+    <rect x="156" y="164" width="168" height="186" rx="18" fill="#6B3A22"/>
+    <ellipse cx="240" cy="228" rx="42" ry="30" fill="#E7B15A"/>
+    <ellipse cx="240" cy="228" rx="22" ry="16" fill="#F3D59A"/>
+  
+</svg>

@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Wasser">
+  <rect width="480" height="480" fill="#F3EEE4"/>
+  <ellipse cx="240" cy="400" rx="118" ry="16" fill="#E4D9C8"/>
+  
+    <rect x="150" y="118" width="36" height="22" rx="6" fill="#2C4A66"/>
+        <path d="M128 156 h80 l10 176 a16 16 0 0 1-16 16 h-68 a16 16 0 0 1-16-16 z" fill="#7EA4C4"/>
+        <rect x="144" y="210" width="48" height="28" rx="6" fill="#F7F4EF" opacity="0.85"/><rect x="236" y="118" width="36" height="22" rx="6" fill="#2C4A66"/>
+        <path d="M214 156 h80 l10 176 a16 16 0 0 1-16 16 h-68 a16 16 0 0 1-16-16 z" fill="#7EA4C4"/>
+        <rect x="230" y="210" width="48" height="28" rx="6" fill="#F7F4EF" opacity="0.85"/><rect x="322" y="118" width="36" height="22" rx="6" fill="#2C4A66"/>
+        <path d="M300 156 h80 l10 176 a16 16 0 0 1-16 16 h-68 a16 16 0 0 1-16-16 z" fill="#7EA4C4"/>
+        <rect x="316" y="210" width="48" height="28" rx="6" fill="#F7F4EF" opacity="0.85"/>
+  
+</svg>

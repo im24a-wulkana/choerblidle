@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Käse">
+  <rect width="480" height="480" fill="#F3EEE4"/>
+  <ellipse cx="240" cy="400" rx="118" ry="16" fill="#E4D9C8"/>
+  
+    <path d="M118 312 L362 312 L292 148 Z" fill="#F0C84A"/>
+    <path d="M150 312 L362 312 L304 176 Z" fill="#F6D56A"/>
+    <circle cx="230" cy="260" r="16" fill="#E1B43A"/>
+    <circle cx="286" cy="236" r="11" fill="#E1B43A"/>
+    <circle cx="268" cy="286" r="9" fill="#E1B43A"/>
+  
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Platzhalter">
+  <rect width="480" height="480" fill="#F3EEE4"/>
+  <ellipse cx="240" cy="400" rx="118" ry="16" fill="#E4D9C8"/>
+  
+    <path d="M150 196 h180 l-22 150 h-136 z" fill="#C8102E"/>
+    <path d="M176 196 c0-78 128-78 128 0" fill="none" stroke="#8E1A24" stroke-width="16" stroke-linecap="round"/>
+    <rect x="214" y="246" width="52" height="16" rx="3" fill="#fff"/>
+    <rect x="232" y="228" width="16" height="52" rx="3" fill="#fff"/>
+  
+</svg>
