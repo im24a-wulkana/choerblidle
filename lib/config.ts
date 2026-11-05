@@ -9,7 +9,7 @@ export const MAX_TIPPS = 4;
 
 /**
  * true, solange data/products.json nur erfundene Beispielpreise enthält.
- * Die eingetragenen Otto's-Preise sind eine echte Erhebung.
+ * Die eingetragenen Preise sind die Migros-Stückpreise der Region Zürich.
  */
 export const BEISPIELPREISE = false;
 

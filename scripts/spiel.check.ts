@@ -24,14 +24,14 @@ import {
 } from "../lib/raetsel.ts";
 import { istTreffer, richtung, wertung } from "../lib/wertung.ts";
 
-assert.equal(produkte.length, 2980);
+assert.equal(produkte.length, 33198);
 assert.equal(new Set(produkte.map((produkt) => produkt.id)).size, produkte.length);
 
 for (const produkt of produkte) {
-  assert.equal(produkt.laden, "ottos");
+  assert.equal(produkt.laden, "migros");
   assert.equal(produkt.stichdatum, "2026-11-05");
   assert.equal(produkt.preisCoop, undefined);
-  assert.equal(produkt.bild, `/products/${produkt.id}.svg`);
+  assert.ok(produkt.bild.startsWith("https://image.migros.ch/"));
 }
 
 assert.equal(tageZwischen(START_DATUM, "2026-11-04"), 0);

@@ -2,7 +2,7 @@
 
 Tägliches Preisrätsel im Browser. Alle sehen am selben Tag dasselbe Produkt und tippen den Preis in Franken. Kein Konto, kein Backend. Der Stand liegt in `localStorage`.
 
-Die Preise in [`data/products.json`](data/products.json) sind die am **5. November 2026** öffentlich angezeigten Online-Preise von Otto's (`api.ottos.ch`, Sortiment Supermarkt, Haushalt, Getränke, Wein, Bier, Spirituosen und Tiernahrung). Migros und Coop haben von dieser Umgebung aus keine Preise geliefert. Die Bilder sind eigene Zeichnungen, keine Produktfotos der Händler.
+Die Preise in [`data/products.json`](data/products.json) sind Migros-Stückpreise der Region Zürich (`gmzh`), abgerufen am **5. November 2026** über `https://api.migros.ch/migros/products/v1/public/products`. Es gibt keinen Coop-Vergleichspreis. Die Fotos werden von `image.migros.ch` geladen und sind nicht ins Repository kopiert.
 
 ## Lokal starten
 
@@ -69,7 +69,7 @@ Neue Produkte **hinten anhängen**. Reihenfolge und Anzahl bestimmen, welches Pr
 
 Die Bonusfrage «Wo ist dieses Produkt günstiger, Migros oder Coop?» gibt es, wenn `laden` `migros` ist und `preisCoop` gesetzt ist. `preis` ist dann der Migros-Preis, `preisCoop` der Coop-Preis. Bei Coop-Produkten das Feld weglassen: der gesuchte Preis ist dort schon der Coop-Preis, ein Migros-Vergleich ist im Format nicht vorgesehen.
 
-Solange in [`lib/config.ts`](lib/config.ts) `BEISPIELPREISE` auf `true` steht, weist die Oberfläche darauf hin, dass die Zahlen Beispiele sind. Mit den Otto's-Preisen steht das Feld auf `false`.
+Solange in [`lib/config.ts`](lib/config.ts) `BEISPIELPREISE` auf `true` steht, weist die Oberfläche darauf hin, dass die Zahlen Beispiele sind. Mit den Migros-Preisen steht das Feld auf `false`.
 
 ## Tagesrätsel
 

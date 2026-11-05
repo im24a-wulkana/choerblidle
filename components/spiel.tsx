@@ -286,7 +286,7 @@ export function Spiel() {
 
         <footer className="mt-auto space-y-1 pt-4 text-center text-xs leading-5 text-[#787c7e] dark:text-[#818384]">
           <p>Ein Versuch pro Tag. Der Stand bleibt auf diesem Gerät.</p>
-          <p>Nicht mit Otto's, Migros oder Coop verbunden.</p>
+          <p>Nicht mit Migros oder Coop verbunden.</p>
         </footer>
       </Spalte>
     </Rahmen>
