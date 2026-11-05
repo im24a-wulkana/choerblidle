@@ -93,15 +93,15 @@ function HilfeDialog() {
             Endless spielt zufällige Migros-Artikel ohne Tageslimit. Ein Treffer gibt 5 Punkte im ersten Tipp,
             dann 4, 3, 2 und 1. Ein Fehlversuch beendet die Runde. Der Highscore bleibt auf diesem Gerät.
           </p>
-          <p>Der erste Tipp zählt für die Wertung. Abweichung ist |Tipp − Preis| / Preis.</p>
+          <p>Der erste Tipp zählt für die Wertung. Ein Treffer liegt höchstens 5 Rappen daneben.</p>
           <Beispiel zeile="CHF 1.00" pfeil="↑" farbe="bg-[#787c7e] dark:bg-[#3a3a3c]">
-            Mehr als 10 % daneben.
+            Mehr als 50 Rappen daneben.
           </Beispiel>
           <Beispiel zeile="CHF 2.15" pfeil="↓" farbe="bg-[#c9b458] dark:bg-[#b59f3b]">
-            Bis 10 % daneben.
+            Bis 50 Rappen daneben.
           </Beispiel>
-          <Beispiel zeile="CHF 2.00" pfeil="✓" farbe="bg-[#6aaa64] dark:bg-[#538d4e]">
-            Bis 2 % ist ein Treffer.
+          <Beispiel zeile="CHF 2.05" pfeil="✓" farbe="bg-[#6aaa64] dark:bg-[#538d4e]">
+            Bis 5 Rappen ist ein Treffer.
           </Beispiel>
           <p>⬆️ der Preis liegt höher. ⬇️ er liegt tiefer. Danach höchstens vier weitere Tipps.</p>
           <p>Am Ende siehst du den Preis und das Stichdatum. Liegt ein Coop-Preis vor: «Wo ist dieses Produkt günstiger, Migros oder Coop?» Richtig gibt einen Stern.</p>

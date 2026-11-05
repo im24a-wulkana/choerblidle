@@ -82,24 +82,55 @@ assert.equal(parseChf("0.01"), 0.01);
 assert.equal(parseChf(""), null);
 assert.equal(parseChf("0"), null);
 assert.equal(parseChf("-1"), null);
-assert.equal(parseChf("3.555"), null);
+assert.equal(parseChf("3.555"), 3.56);
+assert.equal(parseChf("1.224"), 1.22);
+assert.equal(parseChf("1.225"), 1.23);
 assert.equal(parseChf("abc"), null);
 assert.equal(parseChf("2,50 CHF"), null);
 assert.equal(formatChf(2.4), "CHF 2.40");
 
-assert.equal(wertung(10.2, 10), "gruen");
-assert.equal(wertung(10.21, 10), "gelb");
-assert.equal(wertung(9.8, 10), "gruen");
-assert.equal(wertung(9.79, 10), "gelb");
-assert.equal(wertung(11, 10), "gelb");
-assert.equal(wertung(11.01, 10), "weiss");
-assert.equal(wertung(9, 10), "gelb");
-assert.equal(wertung(8.99, 10), "weiss");
-assert.equal(istTreffer(10.2, 10), true);
-assert.equal(istTreffer(10.21, 10), false);
-assert.equal(richtung(9, 10), "hoeher");
-assert.equal(richtung(11, 10), "tiefer");
-assert.equal(richtung(10.1, 10), "treffer");
+assert.equal(wertung(10.05, 10), "gruen");
+assert.equal(wertung(10.06, 10), "gelb");
+assert.equal(wertung(10.5, 10), "gelb");
+assert.equal(wertung(10.51, 10), "weiss");
+assert.equal(istTreffer(10.05, 10), true);
+assert.equal(istTreffer(10.06, 10), false);
+assert.equal(richtung(9.9, 10), "hoeher");
+assert.equal(richtung(10.1, 10), "tiefer");
+assert.equal(richtung(10.05, 10), "treffer");
+
+for (const preis of [0.8, 24.95]) {
+  for (const [delta, treffer, farbe] of [
+    [0.04, true, "gruen"],
+    [0.05, true, "gruen"],
+    [0.06, false, "gelb"],
+    [0.1, false, "gelb"],
+  ] as const) {
+    for (const vorzeichen of [1, -1] as const) {
+      const tipp = Math.round((preis + vorzeichen * delta) * 100) / 100;
+      const label = `${tipp} bei ${preis}`;
+      assert.equal(istTreffer(tipp, preis), treffer, label);
+      assert.equal(wertung(tipp, preis), farbe, label);
+      assert.equal(richtung(tipp, preis), treffer ? "treffer" : vorzeichen > 0 ? "tiefer" : "hoeher", label);
+
+      const tag = naechsterStand(leererStand("2026-11-04"), tipp, preis);
+      assert.equal(tag.fertig, treffer, `daily ${label}`);
+      assert.equal(tag.tipps.length, 1, `daily ${label}`);
+
+      const endlos = endlosNachTipp(
+        {
+          ...leererEndlessSpeicher(),
+          lauf: { produktId: "grenze", tipps: [], fertig: false, vorbei: false, punkte: 0, streak: 0 },
+        },
+        tipp,
+        preis,
+      );
+      assert.equal(endlos.lauf?.fertig, treffer, `endless ${label}`);
+      assert.equal(endlos.lauf?.vorbei, false, `endless ${label}`);
+      assert.equal(endlos.lauf?.punkte, treffer ? 5 : 0, `endless ${label}`);
+    }
+  }
+}
 
 function plusTage(iso: string, tage: number): string {
   const [jahr, monat, tag] = iso.split("-").map(Number);
@@ -166,7 +197,7 @@ const text = teilenText({
   bonusRichtig: true,
   link: "https://choerblidle.example",
 });
-assert.equal(text, "Chörblidle #12 🟨🟨🟩 in 3 ⭐\nhttps://choerblidle.example");
+assert.equal(text, "Chörblidle #12 ⬜🟨🟩 in 3 ⭐\nhttps://choerblidle.example");
 assert.equal(
   teilenText({ nummer: 12, tipps: [10], preis: 10, bonusRichtig: false, link: "https://x" }),
   "Chörblidle #12 🟩 in 1\nhttps://x",
@@ -179,7 +210,7 @@ assert.equal(
     bonusRichtig: false,
     link: "https://x",
   }),
-  "Chörblidle #12 ⬜⬜⬜⬜🟨 in 5\nhttps://x",
+  "Chörblidle #12 ⬜⬜⬜⬜⬜ in 5\nhttps://x",
 );
 
 const mitVergleich = {

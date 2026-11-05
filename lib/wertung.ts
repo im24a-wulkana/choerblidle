@@ -12,15 +12,23 @@ export function abweichungProzent(tipp: number, preis: number): number {
   return abweichung(tipp, preis) * 100;
 }
 
+/** Korrekt bei höchstens 5 Rappen Abstand. Nahe dran bis 50 Rappen. */
+export const TREFFER_RAPPEN = 5;
+export const NAHE_RAPPEN = 50;
+
+/** Abstand in ganzen Rappen. */
+export function differenzRappen(tipp: number, preis: number): number {
+  return Math.abs(inRappen(tipp) - inRappen(preis));
+}
+
 /**
- * Bis 2 % grün, bis 10 % gelb, sonst weiss.
+ * Grün bis 5 Rappen, gelb bis 50 Rappen, sonst weiss.
  * Grenzen sind inklusive und in ganzen Rappen entschieden.
  */
 export function wertung(tipp: number, preis: number): WertungsFarbe {
-  const diff = Math.abs(inRappen(tipp) - inRappen(preis));
-  const basis = inRappen(preis);
-  if (diff * 100 <= basis * 2) return "gruen";
-  if (diff * 100 <= basis * 10) return "gelb";
+  const diff = differenzRappen(tipp, preis);
+  if (diff <= TREFFER_RAPPEN) return "gruen";
+  if (diff <= NAHE_RAPPEN) return "gelb";
   return "weiss";
 }
 
