@@ -1,6 +1,14 @@
 import assert from "node:assert/strict";
 import { START_DATUM } from "../lib/config.ts";
 import {
+  endlosNachTipp,
+  endlosNeu,
+  endlosNaechstes,
+  leererEndlessSpeicher,
+  punkteFuerTreffer,
+  zufallsProdukt,
+} from "../lib/endless.ts";
+import {
   formatCountdown,
   formatStichdatum,
   gestern,
@@ -195,6 +203,44 @@ let bonusStand = naechsterStand(leererStand("2026-11-04"), 1.8, 1.8);
 bonusStand = bonusSetzen(bonusStand, "coop");
 assert.equal(bonusRichtig(bonusStand, mitVergleich), true);
 assert.equal(bonusSetzen(bonusStand, "migros").bonus, "coop");
+
+assert.equal(punkteFuerTreffer(1), 4);
+assert.equal(punkteFuerTreffer(4), 1);
+assert.equal(punkteFuerTreffer(0), 0);
+
+const katalog = [
+  { ...mitVergleich, id: "a", preis: 10 },
+  { ...mitVergleich, id: "b", preis: 10 },
+  { ...mitVergleich, id: "c", preis: 10 },
+];
+assert.equal(zufallsProdukt(katalog, "a", () => 0).id, "b");
+assert.equal(zufallsProdukt(katalog, null, () => 0.5).id, "b");
+assert.equal(zufallsProdukt(katalog, "b", () => 0.5).id, "c");
+
+let endlos = { ...leererEndlessSpeicher(), lauf: { produktId: "a", tipps: [], fertig: false, vorbei: false, punkte: 0, streak: 0 } };
+endlos = endlosNachTipp(endlos, 10, 10);
+assert.equal(endlos.lauf?.fertig, true);
+assert.equal(endlos.lauf?.vorbei, false);
+assert.equal(endlos.lauf?.punkte, 4);
+assert.equal(endlos.lauf?.streak, 1);
+assert.equal(endlos.highscore, 4);
+endlos = endlosNaechstes(endlos, "b");
+assert.equal(endlos.lauf?.produktId, "b");
+assert.equal(endlos.lauf?.tipps.length, 0);
+assert.equal(endlos.lauf?.punkte, 4);
+endlos = endlosNachTipp(endlos, 20, 10);
+endlos = endlosNachTipp(endlos, 1, 10);
+endlos = endlosNachTipp(endlos, 15, 10);
+endlos = endlosNachTipp(endlos, 8, 10);
+assert.equal(endlos.lauf?.vorbei, true);
+assert.equal(endlos.lauf?.punkte, 4);
+assert.equal(endlos.lauf?.streak, 1);
+assert.equal(endlos.highscore, 4);
+endlos = endlosNeu(endlos, "c");
+assert.equal(endlos.lauf?.punkte, 0);
+assert.equal(endlos.lauf?.streak, 0);
+assert.equal(endlos.highscore, 4);
+assert.equal(endlos.lauf?.produktId, "c");
 
 console.log(
   `Tag 1: #${heute.nummer} ${heute.produkt.name} CHF ${heute.produkt.preis} (${heute.produkt.id})`,

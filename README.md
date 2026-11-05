@@ -4,6 +4,8 @@ Tägliches Preisrätsel im Browser. Alle sehen am selben Tag dasselbe Produkt un
 
 Die Preise in [`data/products.json`](data/products.json) sind Migros-Stückpreise der Region Zürich (`gmzh`), abgerufen am **5. November 2026** über `https://api.migros.ch/migros/products/v1/public/products`. Es gibt keinen Coop-Vergleichspreis. Die Fotos werden von `image.migros.ch` geladen und sind nicht ins Repository kopiert.
 
+Auf dem Startbildschirm gibt es das Tagesrätsel und Endless. Endless zieht zufällige Artikel ohne Tageslimit. Treffer geben 4, 3, 2 oder 1 Punkt. Ein Fehlversuch beendet die Runde. Punkte, Streak und Highscore liegen in `localStorage` unter `choerblidle-endless-v1`.
+
 ## Lokal starten
 
 ```bash
