@@ -1,4 +1,4 @@
-export type Laden = "migros" | "coop";
+export type Laden = "migros" | "coop" | "ottos";
 
 export type Produkt = {
   id: string;

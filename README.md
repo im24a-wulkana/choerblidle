@@ -1,8 +1,8 @@
 # Chörblidle
 
-Tägliches Preisrätsel im Browser. Alle sehen am selben Tag dasselbe Produkt aus Migros oder Coop und tippen den Preis in Franken. Kein Konto, kein Backend. Der Stand liegt in `localStorage`.
+Tägliches Preisrätsel im Browser. Alle sehen am selben Tag dasselbe Produkt und tippen den Preis in Franken. Kein Konto, kein Backend. Der Stand liegt in `localStorage`.
 
-Die mitgelieferten Preise und Stichdaten sind **Beispieldaten**. Sie sind keine echten Regalpreise.
+Die Preise in [`data/products.json`](data/products.json) sind die am **5. November 2026** öffentlich angezeigten Online-Preise von Otto's (`api.ottos.ch`, Sortiment Supermarkt, Haushalt, Getränke, Wein, Bier, Spirituosen und Tiernahrung). Migros und Coop haben von dieser Umgebung aus keine Preise geliefert. Die Bilder sind eigene Zeichnungen, keine Produktfotos der Händler.
 
 ## Lokal starten
 
@@ -59,7 +59,7 @@ Produkte stehen in [`data/products.json`](data/products.json). Ein Eintrag sieht
 | `menge` | Packungsgrösse, z. B. `400 g` oder `6 × 1.5 l`. |
 | `preis` | Preis in CHF im Laden `laden`. Das ist der gesuchte Preis. Punkt als Dezimalzeichen, höchstens zwei Stellen. |
 | `preisCoop` | Optional. Preis bei Coop. Nur setzen, wenn `laden` `migros` ist. Dann erscheint die Bonusfrage. |
-| `laden` | `migros` oder `coop`. |
+| `laden` | `migros`, `coop` oder `ottos`. |
 | `bild` | Pfad ab `public`, z. B. `/products/rivella-rot.svg`. |
 | `stichdatum` | Tag der Preiserhebung, `YYYY-MM-DD`. |
 
@@ -69,7 +69,7 @@ Neue Produkte **hinten anhängen**. Reihenfolge und Anzahl bestimmen, welches Pr
 
 Die Bonusfrage «Wo ist dieses Produkt günstiger, Migros oder Coop?» gibt es, wenn `laden` `migros` ist und `preisCoop` gesetzt ist. `preis` ist dann der Migros-Preis, `preisCoop` der Coop-Preis. Bei Coop-Produkten das Feld weglassen: der gesuchte Preis ist dort schon der Coop-Preis, ein Migros-Vergleich ist im Format nicht vorgesehen.
 
-Solange in [`lib/config.ts`](lib/config.ts) `BEISPIELPREISE` auf `true` steht, weist die Oberfläche darauf hin, dass die Zahlen Beispiele sind. Nach dem Eintragen echter Preise auf `false` setzen.
+Solange in [`lib/config.ts`](lib/config.ts) `BEISPIELPREISE` auf `true` steht, weist die Oberfläche darauf hin, dass die Zahlen Beispiele sind. Mit den Otto's-Preisen steht das Feld auf `false`.
 
 ## Tagesrätsel
 

@@ -23,7 +23,7 @@ function istProdukt(wert: unknown): wert is Produkt {
     produkt.menge.trim().length > 0 &&
     gueltigerBetrag(produkt.preis) &&
     (produkt.preisCoop === undefined || gueltigerBetrag(produkt.preisCoop)) &&
-    (produkt.laden === "migros" || produkt.laden === "coop") &&
+    (produkt.laden === "migros" || produkt.laden === "coop" || produkt.laden === "ottos") &&
     typeof produkt.bild === "string" &&
     produkt.bild.startsWith("/products/") &&
     typeof produkt.stichdatum === "string" &&

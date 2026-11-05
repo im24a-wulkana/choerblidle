@@ -8,10 +8,10 @@ export const SHUFFLE_SEED = 20261104;
 export const MAX_TIPPS = 4;
 
 /**
- * Alle Preise und Stichdaten in data/products.json sind Beispieldaten.
- * Auf false setzen, sobald echte Erhebungen eingetragen sind.
+ * true, solange data/products.json nur erfundene Beispielpreise enthält.
+ * Die eingetragenen Otto's-Preise sind eine echte Erhebung.
  */
-export const BEISPIELPREISE = true;
+export const BEISPIELPREISE = false;
 
 export const STORAGE_KEY = "choerblidle-v1";
 

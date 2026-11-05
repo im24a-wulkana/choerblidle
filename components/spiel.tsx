@@ -19,7 +19,7 @@ import {
   vergleichVon,
 } from "@/lib/raetsel";
 import { lesen, schreiben, statistikNachholen, type Speicher } from "@/lib/speicher";
-import type { BonusWahl, Produkt, TagStand, WertungsFarbe } from "@/lib/typen";
+import type { BonusWahl, Laden, Produkt, TagStand, WertungsFarbe } from "@/lib/typen";
 import { abweichungProzent, istTreffer, richtung, wertung } from "@/lib/wertung";
 import { cn } from "@/lib/utils";
 
@@ -30,6 +30,12 @@ const KACHEL: Record<WertungsFarbe, string> = {
 };
 
 const TIPP_WORT = ["ersten", "zweiten", "dritten", "vierten"] as const;
+
+const LADEN_NAME: Record<Laden, string> = {
+  migros: "Migros",
+  coop: "Coop",
+  ottos: "Otto's",
+};
 
 const TASTE =
   "h-12 rounded-none bg-[#121213] px-4 font-bold text-white hover:bg-[#121213]/90 dark:bg-[#d7dadc] dark:text-[#121213] dark:hover:bg-white";
@@ -162,7 +168,7 @@ export function Spiel() {
           </div>
           <h2 className="text-xl font-bold tracking-tight">{produkt.name}</h2>
           <p className="text-sm text-[#787c7e] dark:text-[#818384]">
-            {produkt.menge} · {produkt.laden === "migros" ? "Migros" : "Coop"}
+            {produkt.menge} · {LADEN_NAME[produkt.laden]}
           </p>
           <p className="text-sm font-bold tabular-nums">
             #{raetsel.nummer}
@@ -280,7 +286,7 @@ export function Spiel() {
 
         <footer className="mt-auto space-y-1 pt-4 text-center text-xs leading-5 text-[#787c7e] dark:text-[#818384]">
           <p>Ein Versuch pro Tag. Der Stand bleibt auf diesem Gerät.</p>
-          <p>Nicht mit Migros oder Coop verbunden.</p>
+          <p>Nicht mit Otto's, Migros oder Coop verbunden.</p>
         </footer>
       </Spalte>
     </Rahmen>

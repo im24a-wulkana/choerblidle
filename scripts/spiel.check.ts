@@ -24,14 +24,14 @@ import {
 } from "../lib/raetsel.ts";
 import { istTreffer, richtung, wertung } from "../lib/wertung.ts";
 
-assert.equal(produkte.length, 20);
-assert.equal(new Set(produkte.map((produkt) => produkt.id)).size, 20);
+assert.equal(produkte.length, 2980);
+assert.equal(new Set(produkte.map((produkt) => produkt.id)).size, produkte.length);
 
 for (const produkt of produkte) {
-  if (produkt.preisCoop != null) {
-    assert.notEqual(produkt.preisCoop, produkt.preis);
-    assert.equal(produkt.laden, "migros");
-  }
+  assert.equal(produkt.laden, "ottos");
+  assert.equal(produkt.stichdatum, "2026-11-05");
+  assert.equal(produkt.preisCoop, undefined);
+  assert.equal(produkt.bild, `/products/${produkt.id}.svg`);
 }
 
 assert.equal(tageZwischen(START_DATUM, "2026-11-04"), 0);
@@ -82,17 +82,21 @@ assert.equal(richtung(9, 10), "hoeher");
 assert.equal(richtung(11, 10), "tiefer");
 assert.equal(richtung(10.1, 10), "treffer");
 
+function plusTage(iso: string, tage: number): string {
+  const [jahr, monat, tag] = iso.split("-").map(Number);
+  return new Date(Date.UTC(jahr, monat - 1, tag + tage)).toISOString().slice(0, 10);
+}
+
 const heute = tagesraetsel("2026-11-04", produkte);
 const morgen = tagesraetsel("2026-11-05", produkte);
-assert.equal(heute.produkt.id, "cailler-milch");
 assert.equal(heute.nummer, 1);
 assert.equal(morgen.nummer, 2);
 assert.notEqual(heute.produkt.id, morgen.produkt.id);
 assert.equal(tagesraetsel("2026-11-04", produkte).produkt.id, heute.produkt.id);
 
-const inZwanzig = tagesraetsel("2026-11-24", produkte);
-assert.equal(inZwanzig.produkt.id, heute.produkt.id);
-assert.equal(inZwanzig.nummer, 21);
+const wieder = tagesraetsel(plusTage("2026-11-04", produkte.length), produkte);
+assert.equal(wieder.produkt.id, heute.produkt.id);
+assert.equal(wieder.nummer, produkte.length + 1);
 
 let stand = leererStand("2026-11-04");
 stand = naechsterStand(stand, 11, 10);
@@ -164,12 +168,28 @@ assert.equal(
   "Chörblidle #12 ⬜ → ⬜ in 4\nhttps://x",
 );
 
-const mitVergleich = produkte.find((produkt) => produkt.id === "thomy-senf");
-assert.ok(mitVergleich);
+const mitVergleich = {
+  id: "thomy-senf",
+  name: "Thomy Senf mild",
+  menge: "100 ml",
+  preis: 1.8,
+  preisCoop: 1.7,
+  laden: "migros" as const,
+  bild: "/products/placeholder.svg",
+  stichdatum: "2026-11-05",
+};
 const vergleich = vergleichVon(mitVergleich);
 assert.equal(vergleich?.guenstiger, "coop");
-const coopOnly = produkte.find((produkt) => produkt.id === "valser-classic");
-assert.equal(vergleichVon(coopOnly!), null);
+const coopOnly = {
+  id: "valser-classic",
+  name: "Valser Classic",
+  menge: "6 × 1.5 l",
+  preis: 6.95,
+  laden: "coop" as const,
+  bild: "/products/placeholder.svg",
+  stichdatum: "2026-11-05",
+};
+assert.equal(vergleichVon(coopOnly), null);
 
 let bonusStand = naechsterStand(leererStand("2026-11-04"), 1.8, 1.8);
 bonusStand = bonusSetzen(bonusStand, "coop");
@@ -179,8 +199,7 @@ assert.equal(bonusSetzen(bonusStand, "migros").bonus, "coop");
 console.log(
   `Tag 1: #${heute.nummer} ${heute.produkt.name} CHF ${heute.produkt.preis} (${heute.produkt.id})`,
 );
-const reihe = Array.from({ length: 20 }, (_, index) => {
-  const tag = new Date(Date.UTC(2026, 10, 4 + index)).toISOString().slice(0, 10);
-  return tagesraetsel(tag, produkte).produkt.id;
+const reihe = Array.from({ length: 7 }, (_, index) => {
+  return tagesraetsel(plusTage("2026-11-04", index), produkte).produkt.id;
 });
 console.log(reihe.join(","));

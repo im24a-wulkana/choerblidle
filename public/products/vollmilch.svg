@@ -1,9 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 480" role="img" aria-label="Milch">
-  <rect width="480" height="480" fill="#F3EEE4"/>
-  <ellipse cx="240" cy="400" rx="118" ry="16" fill="#E4D9C8"/>
-  
-    <rect x="196" y="78" width="88" height="46" rx="10" fill="#3E5C78"/>
-    <path d="M168 140 h144 l22 214 a20 20 0 0 1-20 20 h-148 a20 20 0 0 1-20-20 z" fill="#F7F7F5" stroke="#E4E0D8" stroke-width="4"/>
-    <rect x="188" y="210" width="104" height="46" rx="8" fill="#3E5C78"/>
-  
-</svg>
