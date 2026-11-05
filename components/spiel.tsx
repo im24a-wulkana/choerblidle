@@ -5,7 +5,8 @@ import { Kopfzeile, Rahmen, Spalte } from "@/components/spiel-ui";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { BEISPIELPREISE, MAX_TIPPS, PLATZHALTER_BILD } from "@/lib/config";
-import { formatCountdown, formatStichdatum, msBisMitternacht, zurichDatum } from "@/lib/datum";
+import { migrosBild } from "@/lib/bild";
+import { formatCountdown, formatStichdatum, morgen, msBisMitternacht, zurichDatum } from "@/lib/datum";
 import { formatChf, formatProzent, parseChf } from "@/lib/geld";
 import { produkte } from "@/lib/produkte";
 import {
@@ -114,6 +115,7 @@ function TagesSpiel({ onEndless }: { onEndless: () => void }) {
 
   const raetsel = tagesraetsel(datum, produkte);
   const produkt = raetsel.produkt;
+  const naechstesBild = tagesraetsel(morgen(datum), produkte).produkt.bild;
   const vergleich = vergleichVon(produkt);
   const gewonnen = stand.tipps.some((tipp) => istTreffer(tipp, produkt.preis));
 
@@ -181,7 +183,8 @@ function TagesSpiel({ onEndless }: { onEndless: () => void }) {
       <Spalte>
         <section className="flex flex-col items-center gap-2 text-center">
           <div className="flex h-52 w-full items-center justify-center sm:h-64">
-            <ProduktBild src={produkt.bild} />
+            <ProduktBild src={produkt.bild} priority />
+            <BildVoraus src={naechstesBild} />
           </div>
           <h2 className="text-xl font-bold tracking-tight">{produkt.name}</h2>
           <p className="text-sm text-[#787c7e] dark:text-[#818384]">
@@ -385,22 +388,54 @@ function TippListe({ tipps, preis }: { tipps: number[]; preis: number }) {
   );
 }
 
-function ProduktBild({ src }: { src: string }) {
+function ProduktBild({ src, priority = false }: { src: string; priority?: boolean }) {
   const [fehlerSrc, setFehlerSrc] = useState<string | null>(null);
-  const aktuell = fehlerSrc === src ? PLATZHALTER_BILD : src;
+  const [geladen, setGeladen] = useState(false);
+  const quelle = fehlerSrc === src ? PLATZHALTER_BILD : migrosBild(src);
+
+  useEffect(() => {
+    setFehlerSrc(null);
+    setGeladen(false);
+  }, [src]);
+
   return (
-    // eslint-disable-next-line @next/next/no-img-element
-    <img
-      src={aktuell}
-      alt=""
-      width={480}
-      height={480}
-      className="h-full w-auto max-w-full object-contain"
-      onError={() => {
-        if (src !== PLATZHALTER_BILD) setFehlerSrc(src);
-      }}
-    />
+    <div className="relative flex h-full w-full items-center justify-center">
+      {geladen ? null : (
+        <div className="absolute inset-0 animate-pulse bg-[#f4f4f4] dark:bg-[#1a1a1b]" aria-hidden />
+      )}
+      {/* Direkt vom Migros-CDN. Die Vercel-Bildoptimierung wäre ein Extra-Hop und stösst im Gratis-Plan ans Limit. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={quelle}
+        alt=""
+        width={480}
+        height={320}
+        fetchPriority={priority ? "high" : "auto"}
+        loading="eager"
+        decoding="async"
+        className={cn(
+          "h-full w-auto max-w-full object-contain transition-opacity",
+          geladen ? "opacity-100" : "opacity-0",
+        )}
+        onLoad={() => setGeladen(true)}
+        onError={() => {
+          if (src !== PLATZHALTER_BILD && fehlerSrc !== src) setFehlerSrc(src);
+          else setGeladen(true);
+        }}
+      />
+    </div>
   );
+}
+
+function BildVoraus({ src }: { src: string }) {
+  const url = migrosBild(src);
+  useEffect(() => {
+    if (!url.startsWith("https://")) return;
+    const bild = new Image();
+    bild.decoding = "async";
+    bild.src = url;
+  }, [url]);
+  return null;
 }
 
 function Zurueck({ onZurueck }: { onZurueck: () => void }) {
@@ -420,6 +455,7 @@ function EndlosSpiel({ onZurueck }: { onZurueck: () => void }) {
   const [eingabe, setEingabe] = useState("");
   const [fehler, setFehler] = useState<string | null>(null);
   const [speicherFehler, setSpeicherFehler] = useState(false);
+  const [danachId, setDanachId] = useState<string | null>(null);
   const eingabeRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -429,6 +465,7 @@ function EndlosSpiel({ onZurueck }: { onZurueck: () => void }) {
       : false;
     const lauf = bekannt && geladen.lauf ? geladen.lauf : neuerLauf(zufallsProdukt(produkte, null, Math.random).id);
     const bereit = { ...geladen, lauf };
+    setDanachId(zufallsProdukt(produkte, lauf.produktId, Math.random).id);
     setSpeicherFehler(!endlessSchreiben(bereit));
     setSpeicher(bereit);
   }, []);
@@ -478,10 +515,16 @@ function EndlosSpiel({ onZurueck }: { onZurueck: () => void }) {
     if (!speicher.lauf.fertig) eingabeRef.current?.focus();
   }
 
+  function naechsteId(ausser: string) {
+    if (danachId && danachId !== ausser) return danachId;
+    return zufallsProdukt(produkte, ausser, Math.random).id;
+  }
+
   function weiter() {
     if (!speicher?.lauf) return;
-    const naechstes = zufallsProdukt(produkte, speicher.lauf.produktId, Math.random);
-    uebernehmen(endlosNaechstes(speicher, naechstes.id));
+    const id = naechsteId(speicher.lauf.produktId);
+    setDanachId(zufallsProdukt(produkte, id, Math.random).id);
+    uebernehmen(endlosNaechstes(speicher, id));
     setEingabe("");
     setFehler(null);
     eingabeRef.current?.focus();
@@ -489,8 +532,9 @@ function EndlosSpiel({ onZurueck }: { onZurueck: () => void }) {
 
   function neu() {
     if (!speicher) return;
-    const naechstes = zufallsProdukt(produkte, speicher.lauf?.produktId ?? null, Math.random);
-    uebernehmen(endlosNeu(speicher, naechstes.id));
+    const id = naechsteId(speicher.lauf?.produktId ?? "");
+    setDanachId(zufallsProdukt(produkte, id, Math.random).id);
+    uebernehmen(endlosNeu(speicher, id));
     setEingabe("");
     setFehler(null);
   }
@@ -507,7 +551,8 @@ function EndlosSpiel({ onZurueck }: { onZurueck: () => void }) {
         </section>
         <section className="flex flex-col items-center gap-2 text-center">
           <div className="flex h-52 w-full items-center justify-center sm:h-64">
-            <ProduktBild src={produkt.bild} />
+            <ProduktBild src={produkt.bild} priority />
+            <BildVoraus src={produkte.find((eintrag) => eintrag.id === danachId)?.bild ?? ""} />
           </div>
           <h2 className="text-xl font-bold tracking-tight">{produkt.name}</h2>
           <p className="text-sm text-[#787c7e] dark:text-[#818384]">

@@ -19,14 +19,22 @@ export function tageZwischen(von: string, bis: string): number {
   return Math.round((ende - start) / 86_400_000);
 }
 
-export function gestern(datum: string): string {
+export function verschiebeTag(datum: string, tage: number): string {
   const [y, m, d] = datum.split("-").map(Number);
   const utc = new Date(Date.UTC(y, m - 1, d));
-  utc.setUTCDate(utc.getUTCDate() - 1);
+  utc.setUTCDate(utc.getUTCDate() + tage);
   const jahr = utc.getUTCFullYear();
   const monat = String(utc.getUTCMonth() + 1).padStart(2, "0");
   const tag = String(utc.getUTCDate()).padStart(2, "0");
   return `${jahr}-${monat}-${tag}`;
+}
+
+export function gestern(datum: string): string {
+  return verschiebeTag(datum, -1);
+}
+
+export function morgen(datum: string): string {
+  return verschiebeTag(datum, 1);
 }
 
 export function formatStichdatum(iso: string): string {
