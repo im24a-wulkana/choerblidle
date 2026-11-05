@@ -4,8 +4,8 @@ export const START_DATUM = "2026-11-04";
 /** Fester Seed für die Produktreihenfolge. Nicht ändern, sonst verschiebt sich der Kalender. */
 export const SHUFFLE_SEED = 20261104;
 
-/** Erster Tipp plus höchstens fünf weitere. */
-export const MAX_TIPPS = 6;
+/** Erster Tipp plus höchstens vier weitere. */
+export const MAX_TIPPS = 5;
 
 /**
  * true, solange data/products.json nur erfundene Beispielpreise enthält.
