@@ -35,6 +35,8 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       suppressHydrationWarning
     >
       <head>
+        <link rel="preconnect" href="https://image.migros.ch" />
+        <link rel="dns-prefetch" href="https://image.migros.ch" />
         <script
           dangerouslySetInnerHTML={{
             __html:

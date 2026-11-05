@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { migrosBild } from "../lib/bild.ts";
 import { START_DATUM } from "../lib/config.ts";
 import {
   endlosNachTipp,
@@ -12,6 +13,7 @@ import {
   formatCountdown,
   formatStichdatum,
   gestern,
+  morgen as naechsterTag,
   msBisMitternacht,
   tageZwischen,
   zurichDatum,
@@ -46,6 +48,14 @@ assert.equal(tageZwischen(START_DATUM, "2026-11-04"), 0);
 assert.equal(tageZwischen(START_DATUM, "2026-11-05"), 1);
 assert.equal(tageZwischen(START_DATUM, "2026-11-03"), -1);
 assert.equal(gestern("2026-11-04"), "2026-11-03");
+assert.equal(naechsterTag("2026-11-04"), "2026-11-05");
+assert.equal(
+  migrosBild(
+    "https://image.migros.ch/d/mo-boxed/o-af-1-t.clr-fff/abc/produkt.jpg",
+  ),
+  "https://image.migros.ch/d/mo-boxed/v-w-480-h-320/o-af-1/abc/produkt.jpg",
+);
+assert.equal(migrosBild("/products/placeholder.svg"), "/products/placeholder.svg");
 assert.equal(gestern("2026-03-01"), "2026-02-28");
 
 assert.equal(zurichDatum(new Date("2026-11-03T22:30:00Z")), "2026-11-03");
