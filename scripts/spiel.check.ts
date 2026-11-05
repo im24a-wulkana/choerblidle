@@ -1,6 +1,14 @@
 import assert from "node:assert/strict";
 import { START_DATUM } from "../lib/config.ts";
 import {
+  endlosNachTipp,
+  endlosNeu,
+  endlosNaechstes,
+  leererEndlessSpeicher,
+  punkteFuerTreffer,
+  zufallsProdukt,
+} from "../lib/endless.ts";
+import {
   formatCountdown,
   formatStichdatum,
   gestern,
@@ -24,14 +32,14 @@ import {
 } from "../lib/raetsel.ts";
 import { istTreffer, richtung, wertung } from "../lib/wertung.ts";
 
-assert.equal(produkte.length, 20);
-assert.equal(new Set(produkte.map((produkt) => produkt.id)).size, 20);
+assert.equal(produkte.length, 33198);
+assert.equal(new Set(produkte.map((produkt) => produkt.id)).size, produkte.length);
 
 for (const produkt of produkte) {
-  if (produkt.preisCoop != null) {
-    assert.notEqual(produkt.preisCoop, produkt.preis);
-    assert.equal(produkt.laden, "migros");
-  }
+  assert.equal(produkt.laden, "migros");
+  assert.equal(produkt.stichdatum, "2026-11-05");
+  assert.equal(produkt.preisCoop, undefined);
+  assert.ok(produkt.bild.startsWith("https://image.migros.ch/"));
 }
 
 assert.equal(tageZwischen(START_DATUM, "2026-11-04"), 0);
@@ -82,17 +90,21 @@ assert.equal(richtung(9, 10), "hoeher");
 assert.equal(richtung(11, 10), "tiefer");
 assert.equal(richtung(10.1, 10), "treffer");
 
+function plusTage(iso: string, tage: number): string {
+  const [jahr, monat, tag] = iso.split("-").map(Number);
+  return new Date(Date.UTC(jahr, monat - 1, tag + tage)).toISOString().slice(0, 10);
+}
+
 const heute = tagesraetsel("2026-11-04", produkte);
 const morgen = tagesraetsel("2026-11-05", produkte);
-assert.equal(heute.produkt.id, "cailler-milch");
 assert.equal(heute.nummer, 1);
 assert.equal(morgen.nummer, 2);
 assert.notEqual(heute.produkt.id, morgen.produkt.id);
 assert.equal(tagesraetsel("2026-11-04", produkte).produkt.id, heute.produkt.id);
 
-const inZwanzig = tagesraetsel("2026-11-24", produkte);
-assert.equal(inZwanzig.produkt.id, heute.produkt.id);
-assert.equal(inZwanzig.nummer, 21);
+const wieder = tagesraetsel(plusTage("2026-11-04", produkte.length), produkte);
+assert.equal(wieder.produkt.id, heute.produkt.id);
+assert.equal(wieder.nummer, produkte.length + 1);
 
 let stand = leererStand("2026-11-04");
 stand = naechsterStand(stand, 11, 10);
@@ -164,23 +176,76 @@ assert.equal(
   "Chörblidle #12 ⬜ → ⬜ in 4\nhttps://x",
 );
 
-const mitVergleich = produkte.find((produkt) => produkt.id === "thomy-senf");
-assert.ok(mitVergleich);
+const mitVergleich = {
+  id: "thomy-senf",
+  name: "Thomy Senf mild",
+  menge: "100 ml",
+  preis: 1.8,
+  preisCoop: 1.7,
+  laden: "migros" as const,
+  bild: "/products/placeholder.svg",
+  stichdatum: "2026-11-05",
+};
 const vergleich = vergleichVon(mitVergleich);
 assert.equal(vergleich?.guenstiger, "coop");
-const coopOnly = produkte.find((produkt) => produkt.id === "valser-classic");
-assert.equal(vergleichVon(coopOnly!), null);
+const coopOnly = {
+  id: "valser-classic",
+  name: "Valser Classic",
+  menge: "6 × 1.5 l",
+  preis: 6.95,
+  laden: "coop" as const,
+  bild: "/products/placeholder.svg",
+  stichdatum: "2026-11-05",
+};
+assert.equal(vergleichVon(coopOnly), null);
 
 let bonusStand = naechsterStand(leererStand("2026-11-04"), 1.8, 1.8);
 bonusStand = bonusSetzen(bonusStand, "coop");
 assert.equal(bonusRichtig(bonusStand, mitVergleich), true);
 assert.equal(bonusSetzen(bonusStand, "migros").bonus, "coop");
 
+assert.equal(punkteFuerTreffer(1), 4);
+assert.equal(punkteFuerTreffer(4), 1);
+assert.equal(punkteFuerTreffer(0), 0);
+
+const katalog = [
+  { ...mitVergleich, id: "a", preis: 10 },
+  { ...mitVergleich, id: "b", preis: 10 },
+  { ...mitVergleich, id: "c", preis: 10 },
+];
+assert.equal(zufallsProdukt(katalog, "a", () => 0).id, "b");
+assert.equal(zufallsProdukt(katalog, null, () => 0.5).id, "b");
+assert.equal(zufallsProdukt(katalog, "b", () => 0.5).id, "c");
+
+let endlos = { ...leererEndlessSpeicher(), lauf: { produktId: "a", tipps: [], fertig: false, vorbei: false, punkte: 0, streak: 0 } };
+endlos = endlosNachTipp(endlos, 10, 10);
+assert.equal(endlos.lauf?.fertig, true);
+assert.equal(endlos.lauf?.vorbei, false);
+assert.equal(endlos.lauf?.punkte, 4);
+assert.equal(endlos.lauf?.streak, 1);
+assert.equal(endlos.highscore, 4);
+endlos = endlosNaechstes(endlos, "b");
+assert.equal(endlos.lauf?.produktId, "b");
+assert.equal(endlos.lauf?.tipps.length, 0);
+assert.equal(endlos.lauf?.punkte, 4);
+endlos = endlosNachTipp(endlos, 20, 10);
+endlos = endlosNachTipp(endlos, 1, 10);
+endlos = endlosNachTipp(endlos, 15, 10);
+endlos = endlosNachTipp(endlos, 8, 10);
+assert.equal(endlos.lauf?.vorbei, true);
+assert.equal(endlos.lauf?.punkte, 4);
+assert.equal(endlos.lauf?.streak, 1);
+assert.equal(endlos.highscore, 4);
+endlos = endlosNeu(endlos, "c");
+assert.equal(endlos.lauf?.punkte, 0);
+assert.equal(endlos.lauf?.streak, 0);
+assert.equal(endlos.highscore, 4);
+assert.equal(endlos.lauf?.produktId, "c");
+
 console.log(
   `Tag 1: #${heute.nummer} ${heute.produkt.name} CHF ${heute.produkt.preis} (${heute.produkt.id})`,
 );
-const reihe = Array.from({ length: 20 }, (_, index) => {
-  const tag = new Date(Date.UTC(2026, 10, 4 + index)).toISOString().slice(0, 10);
-  return tagesraetsel(tag, produkte).produkt.id;
+const reihe = Array.from({ length: 7 }, (_, index) => {
+  return tagesraetsel(plusTage("2026-11-04", index), produkte).produkt.id;
 });
 console.log(reihe.join(","));

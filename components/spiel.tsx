@@ -18,8 +18,18 @@ import {
   teilenText,
   vergleichVon,
 } from "@/lib/raetsel";
+import {
+  endlosNachTipp,
+  endlosNeu,
+  endlosNaechstes,
+  endlessLesen,
+  endlessSchreiben,
+  neuerLauf,
+  zufallsProdukt,
+  type EndlessSpeicher,
+} from "@/lib/endless";
 import { lesen, schreiben, statistikNachholen, type Speicher } from "@/lib/speicher";
-import type { BonusWahl, Produkt, TagStand, WertungsFarbe } from "@/lib/typen";
+import type { BonusWahl, Laden, Produkt, TagStand, WertungsFarbe } from "@/lib/typen";
 import { abweichungProzent, istTreffer, richtung, wertung } from "@/lib/wertung";
 import { cn } from "@/lib/utils";
 
@@ -31,10 +41,52 @@ const KACHEL: Record<WertungsFarbe, string> = {
 
 const TIPP_WORT = ["ersten", "zweiten", "dritten", "vierten"] as const;
 
+const LADEN_NAME: Record<Laden, string> = {
+  migros: "Migros",
+  coop: "Coop",
+  ottos: "Otto's",
+};
+
 const TASTE =
   "h-12 rounded-none bg-[#121213] px-4 font-bold text-white hover:bg-[#121213]/90 dark:bg-[#d7dadc] dark:text-[#121213] dark:hover:bg-white";
 
 export function Spiel() {
+  const [modus, setModus] = useState<"auswahl" | "tag" | "endlos">("auswahl");
+  if (modus === "tag") return <TagesSpiel onZurueck={() => setModus("auswahl")} />;
+  if (modus === "endlos") return <EndlosSpiel onZurueck={() => setModus("auswahl")} />;
+  return <Startbildschirm onWaehlen={setModus} />;
+}
+
+function Startbildschirm({
+  onWaehlen,
+}: {
+  onWaehlen: (modus: "tag" | "endlos") => void;
+}) {
+  return (
+    <Rahmen>
+      <Kopfzeile />
+      <Spalte>
+        <p className="text-center text-sm text-[#787c7e] dark:text-[#818384]">
+          Was kostet das bei Migros?
+        </p>
+        <Button type="button" className={cn(TASTE, "h-14 w-full")} onClick={() => onWaehlen("tag")}>
+          Tagesrätsel
+        </Button>
+        <p className="text-center text-sm leading-6 text-[#787c7e] dark:text-[#818384]">
+          Ein Produkt pro Tag. Der Stand bleibt auf diesem Gerät.
+        </p>
+        <Button type="button" className={cn(TASTE, "h-14 w-full")} onClick={() => onWaehlen("endlos")}>
+          Endless
+        </Button>
+        <p className="text-center text-sm leading-6 text-[#787c7e] dark:text-[#818384]">
+          Zufällige Artikel, ohne Tageslimit. Treffer geben 4 bis 1 Punkte. Ein Fehlversuch beendet die Runde.
+        </p>
+      </Spalte>
+    </Rahmen>
+  );
+}
+
+function TagesSpiel({ onZurueck }: { onZurueck: () => void }) {
   const [datum, setDatum] = useState<string | null>(null);
   const [jetzt, setJetzt] = useState<number | null>(null);
   const [stand, setStand] = useState<TagStand | null>(null);
@@ -156,13 +208,14 @@ export function Spiel() {
         markiert={stand.fertig && gewonnen ? stand.tipps.length : null}
       />
       <Spalte>
+        <Zurueck onZurueck={onZurueck} />
         <section className="flex flex-col items-center gap-2 text-center">
           <div className="flex h-52 w-full items-center justify-center sm:h-64">
             <ProduktBild src={produkt.bild} />
           </div>
           <h2 className="text-xl font-bold tracking-tight">{produkt.name}</h2>
           <p className="text-sm text-[#787c7e] dark:text-[#818384]">
-            {produkt.menge} · {produkt.laden === "migros" ? "Migros" : "Coop"}
+            {produkt.menge} · {LADEN_NAME[produkt.laden]}
           </p>
           <p className="text-sm font-bold tabular-nums">
             #{raetsel.nummer}
@@ -374,6 +427,206 @@ function ProduktBild({ src }: { src: string }) {
         if (src !== PLATZHALTER_BILD) setFehlerSrc(src);
       }}
     />
+  );
+}
+
+function Zurueck({ onZurueck }: { onZurueck: () => void }) {
+  return (
+    <button
+      type="button"
+      onClick={onZurueck}
+      className="self-start text-sm font-bold text-[#787c7e] underline-offset-2 hover:underline dark:text-[#818384]"
+    >
+      Zur Auswahl
+    </button>
+  );
+}
+
+function EndlosSpiel({ onZurueck }: { onZurueck: () => void }) {
+  const [speicher, setSpeicher] = useState<EndlessSpeicher | null>(null);
+  const [eingabe, setEingabe] = useState("");
+  const [fehler, setFehler] = useState<string | null>(null);
+  const [speicherFehler, setSpeicherFehler] = useState(false);
+  const eingabeRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const geladen = endlessLesen();
+    const bekannt = geladen.lauf
+      ? produkte.some((produkt) => produkt.id === geladen.lauf?.produktId)
+      : false;
+    const lauf = bekannt && geladen.lauf ? geladen.lauf : neuerLauf(zufallsProdukt(produkte, null, Math.random).id);
+    const bereit = { ...geladen, lauf };
+    setSpeicherFehler(!endlessSchreiben(bereit));
+    setSpeicher(bereit);
+  }, []);
+
+  if (!speicher?.lauf) {
+    return (
+      <Rahmen>
+        <Kopfzeile />
+        <Spalte>
+          <Geruest />
+        </Spalte>
+      </Rahmen>
+    );
+  }
+
+  const lauf = speicher.lauf;
+  const produkt = produkte.find((eintrag) => eintrag.id === lauf.produktId);
+  if (!produkt) {
+    return (
+      <Rahmen>
+        <Kopfzeile />
+        <Spalte>
+          <Geruest />
+        </Spalte>
+      </Rahmen>
+    );
+  }
+  const preis = produkt.preis;
+  const gewonnen = lauf.tipps.some((tipp) => istTreffer(tipp, preis));
+
+  function uebernehmen(naechster: EndlessSpeicher) {
+    setSpeicherFehler(!endlessSchreiben(naechster));
+    setSpeicher(naechster);
+  }
+
+  function abgeben(event: FormEvent) {
+    event.preventDefault();
+    if (!speicher?.lauf || speicher.lauf.fertig) return;
+    const betrag = parseChf(eingabe);
+    if (betrag == null) {
+      setFehler("Bitte einen Betrag eingeben, zum Beispiel 3.50.");
+      return;
+    }
+    uebernehmen(endlosNachTipp(speicher, betrag, preis));
+    setEingabe("");
+    setFehler(null);
+    if (!speicher.lauf.fertig) eingabeRef.current?.focus();
+  }
+
+  function weiter() {
+    if (!speicher?.lauf) return;
+    const naechstes = zufallsProdukt(produkte, speicher.lauf.produktId, Math.random);
+    uebernehmen(endlosNaechstes(speicher, naechstes.id));
+    setEingabe("");
+    setFehler(null);
+    eingabeRef.current?.focus();
+  }
+
+  function neu() {
+    if (!speicher) return;
+    const naechstes = zufallsProdukt(produkte, speicher.lauf?.produktId ?? null, Math.random);
+    uebernehmen(endlosNeu(speicher, naechstes.id));
+    setEingabe("");
+    setFehler(null);
+  }
+
+  return (
+    <Rahmen>
+      <Kopfzeile />
+      <Spalte>
+        <Zurueck onZurueck={onZurueck} />
+        <section className="grid grid-cols-3 gap-2 text-center" aria-label="Endless-Stand">
+          <StandZahl label="Punkte" wert={lauf.punkte} />
+          <StandZahl label="Streak" wert={lauf.streak} />
+          <StandZahl label="Highscore" wert={speicher.highscore} />
+        </section>
+        <section className="flex flex-col items-center gap-2 text-center">
+          <div className="flex h-52 w-full items-center justify-center sm:h-64">
+            <ProduktBild src={produkt.bild} />
+          </div>
+          <h2 className="text-xl font-bold tracking-tight">{produkt.name}</h2>
+          <p className="text-sm text-[#787c7e] dark:text-[#818384]">
+            {produkt.menge} · {LADEN_NAME[produkt.laden]}
+          </p>
+          <p className="text-sm font-bold">Endless</p>
+        </section>
+
+        {lauf.fertig ? (
+          <Ergebnis produkt={produkt} tipps={lauf.tipps} gewonnen={gewonnen} />
+        ) : (
+          <form onSubmit={abgeben} className="space-y-2" noValidate>
+            <p className="text-center text-sm font-bold tabular-nums">
+              {lauf.tipps.length + 1}/{MAX_TIPPS}
+            </p>
+            <div className="flex gap-2">
+              <label htmlFor="endlos-preis" className="sr-only">
+                Preis in CHF
+              </label>
+              <Input
+                ref={eingabeRef}
+                id="endlos-preis"
+                value={eingabe}
+                onChange={(event) => {
+                  setEingabe(event.target.value);
+                  if (fehler) setFehler(null);
+                }}
+                inputMode="decimal"
+                autoComplete="off"
+                autoCorrect="off"
+                spellCheck={false}
+                enterKeyHint="done"
+                placeholder="z. B. 3.50"
+                aria-invalid={fehler ? true : undefined}
+                aria-describedby={fehler ? "endlos-fehler" : undefined}
+                className="h-12 rounded-none border-2 text-base tabular-nums"
+              />
+              <Button type="submit" className={TASTE}>
+                Tippen
+              </Button>
+            </div>
+            {fehler ? (
+              <p id="endlos-fehler" className="text-center text-sm text-destructive" role="alert">
+                {fehler}
+              </p>
+            ) : null}
+          </form>
+        )}
+
+        <TippListe tipps={lauf.tipps} preis={preis} />
+
+        {lauf.fertig && !lauf.vorbei ? (
+          <Button type="button" className={cn(TASTE, "w-full")} onClick={weiter}>
+            Nächstes Produkt
+          </Button>
+        ) : null}
+
+        {lauf.vorbei ? (
+          <div className="space-y-2 text-center">
+            <p className="text-sm font-bold">Runde vorbei.</p>
+            <p className="text-sm text-[#787c7e] dark:text-[#818384]">
+              {lauf.punkte} Punkte, Streak {lauf.streak}. Highscore {speicher.highscore}.
+            </p>
+            <Button type="button" className={cn(TASTE, "w-full")} onClick={neu}>
+              Neue Runde
+            </Button>
+          </div>
+        ) : null}
+
+        {speicherFehler ? (
+          <p className="text-center text-sm text-destructive" role="alert">
+            Dieser Browser speichert den Highscore nicht.
+          </p>
+        ) : null}
+
+        <footer className="mt-auto space-y-1 pt-4 text-center text-xs leading-5 text-[#787c7e] dark:text-[#818384]">
+          <p>Kein Tageslimit. Punkte und Highscore bleiben auf diesem Gerät.</p>
+          <p>Nicht mit Migros oder Coop verbunden.</p>
+        </footer>
+      </Spalte>
+    </Rahmen>
+  );
+}
+
+function StandZahl({ label, wert }: { label: string; wert: number }) {
+  return (
+    <p className="border-2 border-[#d3d6da] px-2 py-2 dark:border-[#3a3a3c]">
+      <span className="block text-xs tracking-wide text-[#787c7e] uppercase dark:text-[#818384]">
+        {label}
+      </span>
+      <span className="text-xl font-bold tabular-nums">{wert}</span>
+    </p>
   );
 }
 

@@ -1,8 +1,10 @@
 # Chörblidle
 
-Tägliches Preisrätsel im Browser. Alle sehen am selben Tag dasselbe Produkt aus Migros oder Coop und tippen den Preis in Franken. Kein Konto, kein Backend. Der Stand liegt in `localStorage`.
+Tägliches Preisrätsel im Browser. Alle sehen am selben Tag dasselbe Produkt und tippen den Preis in Franken. Kein Konto, kein Backend. Der Stand liegt in `localStorage`.
 
-Die mitgelieferten Preise und Stichdaten sind **Beispieldaten**. Sie sind keine echten Regalpreise.
+Die Preise in [`data/products.json`](data/products.json) sind Migros-Stückpreise der Region Zürich (`gmzh`), abgerufen am **5. November 2026** über `https://api.migros.ch/migros/products/v1/public/products`. Es gibt keinen Coop-Vergleichspreis. Die Fotos werden von `image.migros.ch` geladen und sind nicht ins Repository kopiert.
+
+Auf dem Startbildschirm gibt es das Tagesrätsel und Endless. Endless zieht zufällige Artikel ohne Tageslimit. Treffer geben 4, 3, 2 oder 1 Punkt. Ein Fehlversuch beendet die Runde. Punkte, Streak und Highscore liegen in `localStorage` unter `choerblidle-endless-v1`.
 
 ## Lokal starten
 
@@ -59,7 +61,7 @@ Produkte stehen in [`data/products.json`](data/products.json). Ein Eintrag sieht
 | `menge` | Packungsgrösse, z. B. `400 g` oder `6 × 1.5 l`. |
 | `preis` | Preis in CHF im Laden `laden`. Das ist der gesuchte Preis. Punkt als Dezimalzeichen, höchstens zwei Stellen. |
 | `preisCoop` | Optional. Preis bei Coop. Nur setzen, wenn `laden` `migros` ist. Dann erscheint die Bonusfrage. |
-| `laden` | `migros` oder `coop`. |
+| `laden` | `migros`, `coop` oder `ottos`. |
 | `bild` | Pfad ab `public`, z. B. `/products/rivella-rot.svg`. |
 | `stichdatum` | Tag der Preiserhebung, `YYYY-MM-DD`. |
 
@@ -69,7 +71,7 @@ Neue Produkte **hinten anhängen**. Reihenfolge und Anzahl bestimmen, welches Pr
 
 Die Bonusfrage «Wo ist dieses Produkt günstiger, Migros oder Coop?» gibt es, wenn `laden` `migros` ist und `preisCoop` gesetzt ist. `preis` ist dann der Migros-Preis, `preisCoop` der Coop-Preis. Bei Coop-Produkten das Feld weglassen: der gesuchte Preis ist dort schon der Coop-Preis, ein Migros-Vergleich ist im Format nicht vorgesehen.
 
-Solange in [`lib/config.ts`](lib/config.ts) `BEISPIELPREISE` auf `true` steht, weist die Oberfläche darauf hin, dass die Zahlen Beispiele sind. Nach dem Eintragen echter Preise auf `false` setzen.
+Solange in [`lib/config.ts`](lib/config.ts) `BEISPIELPREISE` auf `true` steht, weist die Oberfläche darauf hin, dass die Zahlen Beispiele sind. Mit den Migros-Preisen steht das Feld auf `false`.
 
 ## Tagesrätsel
 

@@ -76,6 +76,10 @@ function HilfeDialog() {
         </DialogHeader>
         <div className="space-y-4 text-sm leading-6">
           <p>Jeden Tag dasselbe Produkt, mit Bild, Name, Menge und Laden. Komma und Punkt gehen beide.</p>
+          <p>
+            Endless spielt zufällige Migros-Artikel ohne Tageslimit. Ein Treffer gibt 4 Punkte im ersten Tipp,
+            dann 3, 2 und 1. Ein Fehlversuch beendet die Runde. Der Highscore bleibt auf diesem Gerät.
+          </p>
           <p>Der erste Tipp zählt für die Wertung. Abweichung ist |Tipp − Preis| / Preis.</p>
           <Beispiel zeile="CHF 1.00" pfeil="↑" farbe="bg-[#787c7e] dark:bg-[#3a3a3c]">
             Mehr als 10 % daneben.
