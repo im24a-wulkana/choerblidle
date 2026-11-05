@@ -234,8 +234,8 @@ function EinstellungenDialog() {
           >
             <span
               className={cn(
-                "absolute top-0.5 size-5 rounded-full bg-white transition-transform",
-                dunkel ? "translate-x-[1.35rem]" : "translate-x-0.5",
+                "absolute top-0.5 left-0.5 size-5 rounded-full bg-white transition-transform",
+                dunkel && "translate-x-[calc(2.75rem-1.25rem-0.25rem)]",
               )}
             />
           </button>
