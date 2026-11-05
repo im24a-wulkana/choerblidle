@@ -32,7 +32,7 @@ import {
 } from "../lib/raetsel.ts";
 import { istTreffer, richtung, wertung } from "../lib/wertung.ts";
 
-assert.equal(produkte.length, 33198);
+assert.equal(produkte.length, 10984);
 assert.equal(new Set(produkte.map((produkt) => produkt.id)).size, produkte.length);
 
 for (const produkt of produkte) {

@@ -2,7 +2,7 @@
 
 Tägliches Preisrätsel im Browser. Alle sehen am selben Tag dasselbe Produkt und tippen den Preis in Franken. Kein Konto, kein Backend. Der Stand liegt in `localStorage`.
 
-Die Preise in [`data/products.json`](data/products.json) sind Migros-Stückpreise der Region Zürich (`gmzh`), abgerufen am **5. November 2026** über `https://api.migros.ch/migros/products/v1/public/products`. Es gibt keinen Coop-Vergleichspreis. Die Fotos werden von `image.migros.ch` geladen und sind nicht ins Repository kopiert.
+Die Preise in [`data/products.json`](data/products.json) sind Migros-Stückpreise der Region Zürich (`gmzh`), abgerufen am **5. November 2026** über `https://api.migros.ch/migros/products/v1/public/products`. Es gibt keinen Coop-Vergleichspreis. Die Fotos werden von `image.migros.ch` geladen und sind nicht ins Repository kopiert. Im Katalog bleiben Lebensmittel inklusive Getränke und Babynahrung. Haushalt, Kosmetik, Drogerie, Tiernahrung, Blumen und übriges Non-Food sind draussen.
 
 Die Seite öffnet das Tagesrätsel. Endless liegt als dezenter Link im Header und, nach dem Abschluss, unter «Ergebnis teilen». Endless zieht zufällige Artikel ohne Tageslimit. Treffer geben 4, 3, 2 oder 1 Punkt. Ein Fehlversuch beendet die Runde. Punkte, Streak und Highscore liegen in `localStorage` unter `choerblidle-endless-v1`.
 
