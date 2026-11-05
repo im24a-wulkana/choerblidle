@@ -24,7 +24,7 @@ export function leererEndlessSpeicher(): EndlessSpeicher {
   return { highscore: 0, besterStreak: 0, lauf: null };
 }
 
-/** Treffer im ersten Tipp gibt 6 Punkte, im sechsten noch 1. */
+/** Treffer im ersten Tipp gibt 5 Punkte, im fünften noch 1. */
 export function punkteFuerTreffer(anzahlTipps: number): number {
   if (anzahlTipps < 1 || anzahlTipps > MAX_TIPPS) return 0;
   return MAX_TIPPS - anzahlTipps + 1;
@@ -134,6 +134,11 @@ function istLauf(wert: unknown): wert is EndlessLauf {
   );
 }
 
+function laufAufFuenf(lauf: EndlessLauf): EndlessLauf {
+  if (lauf.fertig || lauf.tipps.length < MAX_TIPPS) return lauf;
+  return { ...lauf, fertig: true, vorbei: true };
+}
+
 function ganzeZahl(wert: unknown): wert is number {
   return typeof wert === "number" && Number.isFinite(wert) && wert >= 0;
 }
@@ -147,7 +152,7 @@ export function endlessLesen(): EndlessSpeicher {
     return {
       highscore: ganzeZahl(parsed.highscore) ? parsed.highscore : 0,
       besterStreak: ganzeZahl(parsed.besterStreak) ? parsed.besterStreak : 0,
-      lauf: istLauf(parsed.lauf) ? parsed.lauf : null,
+      lauf: istLauf(parsed.lauf) ? laufAufFuenf(parsed.lauf) : null,
     };
   } catch {
     return leererEndlessSpeicher();

@@ -40,7 +40,7 @@ const KACHEL: Record<WertungsFarbe, string> = {
   weiss: "bg-[#787c7e] dark:bg-[#3a3a3c]",
 };
 
-const TIPP_WORT = ["ersten", "zweiten", "dritten", "vierten", "fünften", "sechsten"] as const;
+const TIPP_WORT = ["ersten", "zweiten", "dritten", "vierten", "fünften"] as const;
 
 const LADEN_NAME: Record<Laden, string> = {
   migros: "Migros",

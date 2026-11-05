@@ -1,4 +1,4 @@
-import { STORAGE_KEY } from "@/lib/config";
+import { MAX_TIPPS, STORAGE_KEY } from "@/lib/config";
 import { leereStatistik, statistikAktualisieren } from "@/lib/raetsel";
 import type { Statistik, TagStand } from "@/lib/typen";
 
@@ -27,11 +27,20 @@ function istTagStand(wert: unknown): wert is TagStand {
   );
 }
 
-function verteilungMitSechs(statistik: Statistik): Statistik {
+/** Vier Balken werden aufgefüllt, der sechste Balken zählt zum fünften (letzter Versuch). */
+export function verteilungAufFuenf(roh: readonly number[]): Statistik["verteilung"] {
+  const basis = roh.slice(0, 5);
+  while (basis.length < 5) basis.push(0);
+  if (roh.length > 5) {
+    basis[4] += roh.slice(5).reduce((summe, wert) => summe + wert, 0);
+  }
+  return basis as Statistik["verteilung"];
+}
+
+function verteilungMigrieren(statistik: Statistik): Statistik {
   const roh = statistik.verteilung as readonly number[];
-  if (roh.length === 6) return statistik;
-  const verteilung = [...roh, 0, 0] as Statistik["verteilung"];
-  return { ...statistik, verteilung };
+  if (roh.length === 5) return statistik;
+  return { ...statistik, verteilung: verteilungAufFuenf(roh) };
 }
 
 function istStatistik(wert: unknown): wert is Statistik {
@@ -41,8 +50,7 @@ function istStatistik(wert: unknown): wert is Statistik {
     typeof statistik.gespielt === "number" &&
     typeof statistik.siege === "number" &&
     Array.isArray(statistik.verteilung) &&
-    ((statistik.verteilung as readonly number[]).length === 4 ||
-      (statistik.verteilung as readonly number[]).length === 6) &&
+    [4, 5, 6].includes((statistik.verteilung as readonly number[]).length) &&
     statistik.verteilung.every((eintrag) => typeof eintrag === "number") &&
     typeof statistik.streak === "number" &&
     typeof statistik.besteSerie === "number" &&
@@ -61,13 +69,16 @@ export function lesen(): Speicher {
     const tage: Record<string, TagStand> = {};
     if (parsed.tage && typeof parsed.tage === "object") {
       for (const [datum, stand] of Object.entries(parsed.tage)) {
-        if (istTagStand(stand) && stand.datum === datum) tage[datum] = stand;
+        if (istTagStand(stand) && stand.datum === datum) {
+          tage[datum] =
+            !stand.fertig && stand.tipps.length >= MAX_TIPPS ? { ...stand, fertig: true } : stand;
+        }
       }
     }
     return {
       tage,
       statistik: istStatistik(parsed.statistik)
-        ? verteilungMitSechs(parsed.statistik)
+        ? verteilungMigrieren(parsed.statistik)
         : leereStatistik(),
     };
   } catch {

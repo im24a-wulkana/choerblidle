@@ -75,7 +75,7 @@ export function leereStatistik(): Statistik {
   return {
     gespielt: 0,
     siege: 0,
-    verteilung: [0, 0, 0, 0, 0, 0],
+    verteilung: [0, 0, 0, 0, 0],
     streak: 0,
     besteSerie: 0,
     letzterSieg: null,
@@ -102,7 +102,7 @@ export function statistikAktualisieren(
 ): Statistik {
   if (!stand.fertig || statistik.gewerteteTage.includes(stand.datum)) return statistik;
   const gewonnen = stand.tipps.some((tipp) => istTreffer(tipp, preis));
-  const verteilung: [number, number, number, number, number, number] = [...statistik.verteilung];
+  const verteilung: [number, number, number, number, number] = [...statistik.verteilung];
   let streak = statistik.streak;
   let letzterSieg = statistik.letzterSieg;
   if (gewonnen) {
