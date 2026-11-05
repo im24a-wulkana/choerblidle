@@ -84,14 +84,14 @@ function HilfeDialog() {
         <DialogHeader className="items-center gap-2 pr-6">
           <DialogTitle className="text-center text-lg font-bold">Spielregeln</DialogTitle>
           <DialogDescription className="text-center text-sm text-[#787c7e] dark:text-[#818384]">
-            Errate den Preis in vier Tipps.
+            Errate den Preis in sechs Tipps.
           </DialogDescription>
         </DialogHeader>
         <div className="space-y-4 text-sm leading-6">
           <p>Jeden Tag dasselbe Produkt, mit Bild, Name, Menge und Laden. Komma und Punkt gehen beide.</p>
           <p>
-            Endless spielt zufällige Migros-Artikel ohne Tageslimit. Ein Treffer gibt 4 Punkte im ersten Tipp,
-            dann 3, 2 und 1. Ein Fehlversuch beendet die Runde. Der Highscore bleibt auf diesem Gerät.
+            Endless spielt zufällige Migros-Artikel ohne Tageslimit. Ein Treffer gibt 6 Punkte im ersten Tipp,
+            dann 5, 4, 3, 2 und 1. Ein Fehlversuch beendet die Runde. Der Highscore bleibt auf diesem Gerät.
           </p>
           <p>Der erste Tipp zählt für die Wertung. Abweichung ist |Tipp − Preis| / Preis.</p>
           <Beispiel zeile="CHF 1.00" pfeil="↑" farbe="bg-[#787c7e] dark:bg-[#3a3a3c]">
@@ -103,7 +103,7 @@ function HilfeDialog() {
           <Beispiel zeile="CHF 2.00" pfeil="✓" farbe="bg-[#6aaa64] dark:bg-[#538d4e]">
             Bis 2 % ist ein Treffer.
           </Beispiel>
-          <p>⬆️ der Preis liegt höher. ⬇️ er liegt tiefer. Danach höchstens drei weitere Tipps.</p>
+          <p>⬆️ der Preis liegt höher. ⬇️ er liegt tiefer. Danach höchstens fünf weitere Tipps.</p>
           <p>Am Ende siehst du den Preis und das Stichdatum. Liegt ein Coop-Preis vor: «Wo ist dieses Produkt günstiger, Migros oder Coop?» Richtig gibt einen Stern.</p>
           <p>Ein Versuch pro Tag, gespeichert auf diesem Gerät. Die Serie zählt Siege an aufeinanderfolgenden Tagen.</p>
         </div>

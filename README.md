@@ -4,7 +4,7 @@ Tägliches Preisrätsel im Browser. Alle sehen am selben Tag dasselbe Produkt un
 
 Die Preise in [`data/products.json`](data/products.json) sind Migros-Stückpreise der Region Zürich (`gmzh`), abgerufen am **5. November 2026** über `https://api.migros.ch/migros/products/v1/public/products`. Es gibt keinen Coop-Vergleichspreis. Die Fotos werden von `image.migros.ch` geladen und sind nicht ins Repository kopiert. Im Katalog bleiben Lebensmittel inklusive Getränke und Babynahrung. Haushalt, Kosmetik, Drogerie, Tiernahrung, Blumen und übriges Non-Food sind draussen.
 
-Die Seite öffnet das Tagesrätsel. Endless liegt als dezenter Link im Header und, nach dem Abschluss, unter «Ergebnis teilen». Endless zieht zufällige Artikel ohne Tageslimit. Treffer geben 4, 3, 2 oder 1 Punkt. Ein Fehlversuch beendet die Runde. Punkte, Streak und Highscore liegen in `localStorage` unter `choerblidle-endless-v1`.
+Die Seite öffnet das Tagesrätsel. Endless liegt als dezenter Link im Header und, nach dem Abschluss, unter «Ergebnis teilen». Endless zieht zufällige Artikel ohne Tageslimit. Treffer geben 6, 5, 4, 3, 2 oder 1 Punkt. Ein Fehlversuch beendet die Runde. Punkte, Streak und Highscore liegen in `localStorage` unter `choerblidle-endless-v1`.
 
 ## Lokal starten
 
@@ -79,7 +79,7 @@ Solange in [`lib/config.ts`](lib/config.ts) `BEISPIELPREISE` auf `true` steht, w
 - Start: 4. November 2026. Spielnummer `#N` ist die Anzahl Tage seit diesem Datum plus 1.
 - Die Produkte werden einmal mit dem festen Seed `20261104` gemischt. Tag `t` zeigt `gemischt[t % anzahl]`.
 - Der erste Tipp zählt für die Wertung: bis 2 % Abweichung grün, bis 10 % gelb, sonst weiss. Abweichung = |Tipp − Preis| / Preis.
-- Danach höchstens drei weitere Tipps. ⬆️ heisst, der Preis liegt höher, ⬇️ heisst tiefer. Ein Treffer ist höchstens 2 % daneben.
+- Danach höchstens fünf weitere Tipps. ⬆️ heisst, der Preis liegt höher, ⬇️ heisst tiefer. Ein Treffer ist höchstens 2 % daneben.
 - Danach siehst du Preis und Stichdatum. Die richtige Bonusantwort gibt einen Stern.
 - Pro Tag ein Versuch. Nach dem Neuladen ist der Stand noch da. Die Serie zählt Siege an aufeinanderfolgenden Tagen.
 

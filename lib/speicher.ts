@@ -27,6 +27,13 @@ function istTagStand(wert: unknown): wert is TagStand {
   );
 }
 
+function verteilungMitSechs(statistik: Statistik): Statistik {
+  const roh = statistik.verteilung as readonly number[];
+  if (roh.length === 6) return statistik;
+  const verteilung = [...roh, 0, 0] as Statistik["verteilung"];
+  return { ...statistik, verteilung };
+}
+
 function istStatistik(wert: unknown): wert is Statistik {
   if (!wert || typeof wert !== "object") return false;
   const statistik = wert as Statistik;
@@ -34,7 +41,8 @@ function istStatistik(wert: unknown): wert is Statistik {
     typeof statistik.gespielt === "number" &&
     typeof statistik.siege === "number" &&
     Array.isArray(statistik.verteilung) &&
-    statistik.verteilung.length === 4 &&
+    ((statistik.verteilung as readonly number[]).length === 4 ||
+      (statistik.verteilung as readonly number[]).length === 6) &&
     statistik.verteilung.every((eintrag) => typeof eintrag === "number") &&
     typeof statistik.streak === "number" &&
     typeof statistik.besteSerie === "number" &&
@@ -58,7 +66,9 @@ export function lesen(): Speicher {
     }
     return {
       tage,
-      statistik: istStatistik(parsed.statistik) ? parsed.statistik : leereStatistik(),
+      statistik: istStatistik(parsed.statistik)
+        ? verteilungMitSechs(parsed.statistik)
+        : leereStatistik(),
     };
   } catch {
     return leererSpeicher();

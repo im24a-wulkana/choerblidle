@@ -24,7 +24,7 @@ export function leererEndlessSpeicher(): EndlessSpeicher {
   return { highscore: 0, besterStreak: 0, lauf: null };
 }
 
-/** Treffer im ersten Tipp gibt 4 Punkte, im vierten noch 1. */
+/** Treffer im ersten Tipp gibt 6 Punkte, im sechsten noch 1. */
 export function punkteFuerTreffer(anzahlTipps: number): number {
   if (anzahlTipps < 1 || anzahlTipps > MAX_TIPPS) return 0;
   return MAX_TIPPS - anzahlTipps + 1;

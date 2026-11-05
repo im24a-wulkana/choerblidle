@@ -24,7 +24,7 @@ export type TagStand = {
 export type Statistik = {
   gespielt: number;
   siege: number;
-  verteilung: [number, number, number, number];
+  verteilung: [number, number, number, number, number, number];
   streak: number;
   besteSerie: number;
   letzterSieg: string | null;
