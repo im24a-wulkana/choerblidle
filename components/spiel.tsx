@@ -51,42 +51,12 @@ const TASTE =
   "h-12 rounded-none bg-[#121213] px-4 font-bold text-white hover:bg-[#121213]/90 dark:bg-[#d7dadc] dark:text-[#121213] dark:hover:bg-white";
 
 export function Spiel() {
-  const [modus, setModus] = useState<"auswahl" | "tag" | "endlos">("auswahl");
-  if (modus === "tag") return <TagesSpiel onZurueck={() => setModus("auswahl")} />;
-  if (modus === "endlos") return <EndlosSpiel onZurueck={() => setModus("auswahl")} />;
-  return <Startbildschirm onWaehlen={setModus} />;
+  const [modus, setModus] = useState<"tag" | "endlos">("tag");
+  if (modus === "endlos") return <EndlosSpiel onZurueck={() => setModus("tag")} />;
+  return <TagesSpiel onEndless={() => setModus("endlos")} />;
 }
 
-function Startbildschirm({
-  onWaehlen,
-}: {
-  onWaehlen: (modus: "tag" | "endlos") => void;
-}) {
-  return (
-    <Rahmen>
-      <Kopfzeile />
-      <Spalte>
-        <p className="text-center text-sm text-[#787c7e] dark:text-[#818384]">
-          Was kostet das bei Migros?
-        </p>
-        <Button type="button" className={cn(TASTE, "h-14 w-full")} onClick={() => onWaehlen("tag")}>
-          Tagesrätsel
-        </Button>
-        <p className="text-center text-sm leading-6 text-[#787c7e] dark:text-[#818384]">
-          Ein Produkt pro Tag. Der Stand bleibt auf diesem Gerät.
-        </p>
-        <Button type="button" className={cn(TASTE, "h-14 w-full")} onClick={() => onWaehlen("endlos")}>
-          Endless
-        </Button>
-        <p className="text-center text-sm leading-6 text-[#787c7e] dark:text-[#818384]">
-          Zufällige Artikel, ohne Tageslimit. Treffer geben 4 bis 1 Punkte. Ein Fehlversuch beendet die Runde.
-        </p>
-      </Spalte>
-    </Rahmen>
-  );
-}
-
-function TagesSpiel({ onZurueck }: { onZurueck: () => void }) {
+function TagesSpiel({ onEndless }: { onEndless: () => void }) {
   const [datum, setDatum] = useState<string | null>(null);
   const [jetzt, setJetzt] = useState<number | null>(null);
   const [stand, setStand] = useState<TagStand | null>(null);
@@ -134,7 +104,7 @@ function TagesSpiel({ onZurueck }: { onZurueck: () => void }) {
   if (!datum || !stand || !speicher || jetzt == null) {
     return (
       <Rahmen>
-        <Kopfzeile />
+        <Kopfzeile modusWechsel={{ label: "Endless", onClick: onEndless }} />
         <Spalte>
           <Geruest />
         </Spalte>
@@ -206,9 +176,9 @@ function TagesSpiel({ onZurueck }: { onZurueck: () => void }) {
         statistik={speicher.statistik}
         heute={datum}
         markiert={stand.fertig && gewonnen ? stand.tipps.length : null}
+        modusWechsel={{ label: "Endless", onClick: onEndless }}
       />
       <Spalte>
-        <Zurueck onZurueck={onZurueck} />
         <section className="flex flex-col items-center gap-2 text-center">
           <div className="flex h-52 w-full items-center justify-center sm:h-64">
             <ProduktBild src={produkt.bild} />
@@ -278,6 +248,9 @@ function TagesSpiel({ onZurueck }: { onZurueck: () => void }) {
           <div className="space-y-2">
             <Button type="button" className={cn(TASTE, "w-full")} onClick={teilen}>
               {kopiert ? "Kopiert" : "Ergebnis teilen"}
+            </Button>
+            <Button type="button" className={cn(TASTE, "w-full")} onClick={onEndless}>
+              Endless spielen
             </Button>
             {manuell ? (
               <div className="space-y-1">
@@ -437,7 +410,7 @@ function Zurueck({ onZurueck }: { onZurueck: () => void }) {
       onClick={onZurueck}
       className="self-start text-sm font-bold text-[#787c7e] underline-offset-2 hover:underline dark:text-[#818384]"
     >
-      Zur Auswahl
+      Zum Tagesrätsel
     </button>
   );
 }
@@ -463,7 +436,7 @@ function EndlosSpiel({ onZurueck }: { onZurueck: () => void }) {
   if (!speicher?.lauf) {
     return (
       <Rahmen>
-        <Kopfzeile />
+        <Kopfzeile modusWechsel={{ label: "Daily", onClick: onZurueck }} />
         <Spalte>
           <Geruest />
         </Spalte>
@@ -476,7 +449,7 @@ function EndlosSpiel({ onZurueck }: { onZurueck: () => void }) {
   if (!produkt) {
     return (
       <Rahmen>
-        <Kopfzeile />
+        <Kopfzeile modusWechsel={{ label: "Daily", onClick: onZurueck }} />
         <Spalte>
           <Geruest />
         </Spalte>
@@ -524,7 +497,7 @@ function EndlosSpiel({ onZurueck }: { onZurueck: () => void }) {
 
   return (
     <Rahmen>
-      <Kopfzeile />
+      <Kopfzeile modusWechsel={{ label: "Daily", onClick: onZurueck }} />
       <Spalte>
         <Zurueck onZurueck={onZurueck} />
         <section className="grid grid-cols-3 gap-2 text-center" aria-label="Endless-Stand">

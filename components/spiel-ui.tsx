@@ -26,14 +26,27 @@ export function Kopfzeile({
   statistik = leereStatistik(),
   heute = "",
   markiert = null,
+  modusWechsel = null,
 }: {
   statistik?: Statistik;
   heute?: string;
   markiert?: number | null;
+  modusWechsel?: { label: string; onClick: () => void } | null;
 }) {
   return (
     <header className="relative flex h-14 shrink-0 items-center justify-between border-b border-[#d3d6da] px-1 dark:border-[#3a3a3c]">
-      <HilfeDialog />
+      <div className="flex items-center">
+        <HilfeDialog />
+        {modusWechsel ? (
+          <button
+            type="button"
+            onClick={modusWechsel.onClick}
+            className="px-1 text-xs font-semibold text-[#787c7e] hover:text-[#121213] dark:text-[#818384] dark:hover:text-white"
+          >
+            {modusWechsel.label}
+          </button>
+        ) : null}
+      </div>
       <h1 className="pointer-events-none absolute left-1/2 -translate-x-1/2 text-[1.45rem] font-bold tracking-tight sm:text-[1.85rem]">
         Chörblidle
       </h1>
