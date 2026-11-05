@@ -40,7 +40,7 @@ const KACHEL: Record<WertungsFarbe, string> = {
   weiss: "bg-[#787c7e] dark:bg-[#3a3a3c]",
 };
 
-const TIPP_WORT = ["ersten", "zweiten", "dritten", "vierten"] as const;
+const TIPP_WORT = ["ersten", "zweiten", "dritten", "vierten", "fünften", "sechsten"] as const;
 
 const LADEN_NAME: Record<Laden, string> = {
   migros: "Migros",
@@ -338,7 +338,7 @@ function Ergebnis({
         Stichdatum {formatStichdatum(produkt.stichdatum)}
       </p>
       <p className="text-sm">
-        {gewonnen ? `Getroffen im ${wort} Tipp.` : "Kein Treffer in vier Tipps."}
+        {gewonnen ? `Getroffen im ${wort} Tipp.` : `Kein Treffer in ${MAX_TIPPS} Tipps.`}
         {prozent == null
           ? null
           : prozent === 0

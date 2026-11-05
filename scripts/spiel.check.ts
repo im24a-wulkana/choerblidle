@@ -130,21 +130,16 @@ let stats = leereStatistik();
 stats = statistikAktualisieren(stats, stand, 10);
 assert.equal(stats.gespielt, 1);
 assert.equal(stats.siege, 1);
-assert.deepEqual(stats.verteilung, [0, 0, 1, 0]);
+assert.deepEqual(stats.verteilung, [0, 0, 1, 0, 0, 0]);
 assert.equal(stats.streak, 1);
 assert.equal(statistikAktualisieren(stats, stand, 10).gespielt, 1);
 
-const verloren = naechsterStand(
-  naechsterStand(
-    naechsterStand(naechsterStand(leererStand("2026-11-05"), 1, 10), 2, 10),
-    3,
-    10,
-  ),
-  4,
-  10,
+const verloren = [1, 2, 3, 4, 5, 6].reduce(
+  (stand, tipp) => naechsterStand(stand, tipp, 10),
+  leererStand("2026-11-05"),
 );
 assert.equal(verloren.fertig, true);
-assert.equal(verloren.tipps.length, 4);
+assert.equal(verloren.tipps.length, 6);
 stats = statistikAktualisieren(stats, verloren, 10);
 assert.equal(stats.gespielt, 2);
 assert.equal(stats.siege, 1);
@@ -170,7 +165,7 @@ const text = teilenText({
   bonusRichtig: true,
   link: "https://choerblidle.example",
 });
-assert.equal(text, "Chörblidle #12 🟨 → 🟩 in 3 ⭐\nhttps://choerblidle.example");
+assert.equal(text, "Chörblidle #12 🟨🟨🟩 in 3 ⭐\nhttps://choerblidle.example");
 assert.equal(
   teilenText({ nummer: 12, tipps: [10], preis: 10, bonusRichtig: false, link: "https://x" }),
   "Chörblidle #12 🟩 in 1\nhttps://x",
@@ -178,12 +173,12 @@ assert.equal(
 assert.equal(
   teilenText({
     nummer: 12,
-    tipps: [20, 1, 15, 8],
+    tipps: [20, 1, 15, 8, 12, 9],
     preis: 10,
     bonusRichtig: false,
     link: "https://x",
   }),
-  "Chörblidle #12 ⬜ → ⬜ in 4\nhttps://x",
+  "Chörblidle #12 ⬜⬜⬜⬜⬜🟨 in 6\nhttps://x",
 );
 
 const mitVergleich = {
@@ -214,8 +209,8 @@ bonusStand = bonusSetzen(bonusStand, "coop");
 assert.equal(bonusRichtig(bonusStand, mitVergleich), true);
 assert.equal(bonusSetzen(bonusStand, "migros").bonus, "coop");
 
-assert.equal(punkteFuerTreffer(1), 4);
-assert.equal(punkteFuerTreffer(4), 1);
+assert.equal(punkteFuerTreffer(1), 6);
+assert.equal(punkteFuerTreffer(6), 1);
 assert.equal(punkteFuerTreffer(0), 0);
 
 const katalog = [
@@ -231,25 +226,28 @@ let endlos = { ...leererEndlessSpeicher(), lauf: { produktId: "a", tipps: [], fe
 endlos = endlosNachTipp(endlos, 10, 10);
 assert.equal(endlos.lauf?.fertig, true);
 assert.equal(endlos.lauf?.vorbei, false);
-assert.equal(endlos.lauf?.punkte, 4);
+assert.equal(endlos.lauf?.punkte, 6);
 assert.equal(endlos.lauf?.streak, 1);
-assert.equal(endlos.highscore, 4);
+assert.equal(endlos.highscore, 6);
 endlos = endlosNaechstes(endlos, "b");
 assert.equal(endlos.lauf?.produktId, "b");
 assert.equal(endlos.lauf?.tipps.length, 0);
-assert.equal(endlos.lauf?.punkte, 4);
+assert.equal(endlos.lauf?.punkte, 6);
 endlos = endlosNachTipp(endlos, 20, 10);
 endlos = endlosNachTipp(endlos, 1, 10);
 endlos = endlosNachTipp(endlos, 15, 10);
 endlos = endlosNachTipp(endlos, 8, 10);
+assert.equal(endlos.lauf?.vorbei, false);
+endlos = endlosNachTipp(endlos, 30, 10);
+endlos = endlosNachTipp(endlos, 7, 10);
 assert.equal(endlos.lauf?.vorbei, true);
-assert.equal(endlos.lauf?.punkte, 4);
+assert.equal(endlos.lauf?.punkte, 6);
 assert.equal(endlos.lauf?.streak, 1);
-assert.equal(endlos.highscore, 4);
+assert.equal(endlos.highscore, 6);
 endlos = endlosNeu(endlos, "c");
 assert.equal(endlos.lauf?.punkte, 0);
 assert.equal(endlos.lauf?.streak, 0);
-assert.equal(endlos.highscore, 4);
+assert.equal(endlos.highscore, 6);
 assert.equal(endlos.lauf?.produktId, "c");
 
 console.log(
