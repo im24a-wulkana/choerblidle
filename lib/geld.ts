@@ -1,12 +1,20 @@
 const MAX_BETRAG = 999.99;
 
-/** Akzeptiert Komma und Punkt, optional Schweizer Tausendertrennzeichen. */
+/**
+ * Akzeptiert Komma und Punkt, optional Schweizer Tausendertrennzeichen.
+ * Mehr als zwei Nachkommastellen werden kaufmännisch auf Rappen gerundet.
+ */
 export function parseChf(roh: string): number | null {
-  const text = roh.trim().replace(/\s/g, "").replace(/'/g, "").replace(/’/g, "");
-  if (!/^\d+([.,]\d{1,2})?$/.test(text)) return null;
-  const betrag = Number(text.replace(",", "."));
-  if (!Number.isFinite(betrag) || betrag <= 0 || betrag > MAX_BETRAG) return null;
-  return Math.round(betrag * 100) / 100;
+  const text = roh.trim().replace(/\s/g, "").replace(/'/g, "").replace(/’/g, "").replace(",", ".");
+  if (!/^\d+(\.\d+)?$/.test(text)) return null;
+  const [ganzText, frac = ""] = text.split(".");
+  const ganz = Number(ganzText);
+  if (!Number.isSafeInteger(ganz)) return null;
+  const ziffern = (frac + "000").slice(0, 3);
+  let rappen = ganz * 100 + Number(ziffern.slice(0, 2));
+  if (ziffern[2] >= "5") rappen += 1;
+  if (rappen <= 0 || rappen > Math.round(MAX_BETRAG * 100)) return null;
+  return rappen / 100;
 }
 
 export function formatChf(betrag: number): string {

@@ -78,8 +78,8 @@ Solange in [`lib/config.ts`](lib/config.ts) `BEISPIELPREISE` auf `true` steht, w
 - Zeitzone: `Europe/Zurich`. Der Tag wechselt um Mitternacht Schweizer Zeit.
 - Start: 4. November 2026. Spielnummer `#N` ist die Anzahl Tage seit diesem Datum plus 1.
 - Die Produkte werden einmal mit dem festen Seed `20261104` gemischt. Tag `t` zeigt `gemischt[t % anzahl]`.
-- Der erste Tipp zählt für die Wertung: bis 2 % Abweichung grün, bis 10 % gelb, sonst weiss. Abweichung = |Tipp − Preis| / Preis.
-- Danach höchstens vier weitere Tipps. ⬆️ heisst, der Preis liegt höher, ⬇️ heisst tiefer. Ein Treffer ist höchstens 2 % daneben.
+- Der erste Tipp zählt für die Wertung: bis 5 Rappen grün, bis 50 Rappen gelb, sonst weiss. Gerechnet wird in ganzen Rappen, ohne Prozent.
+- Danach höchstens vier weitere Tipps. ⬆️ heisst, der Preis liegt höher, ⬇️ heisst tiefer. Ein Treffer ist höchstens 5 Rappen daneben.
 - Danach siehst du Preis und Stichdatum. Die richtige Bonusantwort gibt einen Stern.
 - Pro Tag ein Versuch. Nach dem Neuladen ist der Stand noch da. Die Serie zählt Siege an aufeinanderfolgenden Tagen.
 
